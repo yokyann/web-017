@@ -14,4 +14,4 @@ function NavigationPanel(props) {
     </div>
   );
 }
-export default Logout;
+export default NavigationPanel;

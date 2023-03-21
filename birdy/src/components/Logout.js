@@ -1,7 +1,11 @@
 function Logout(props) {
+  function logoutHandler() {
+    props.logout();
+  } 
+
   return (
     <div>
-      <button className="button">logout</button>
+      <button onClick={logoutHandler} >logout</button>
     </div>
   );
 }
