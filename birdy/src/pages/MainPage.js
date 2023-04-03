@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 import NavigationPanel from "../components/NavigationPanel";
 import Signin from "../components/SignIn";
 import "../index.css";
-import Feed from "./Feed";
 
 function MainPage(props) {
 
