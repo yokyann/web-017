@@ -40,6 +40,10 @@ function Signin(props) {
     props.getLogin();
   };
 
+  const getHomePage = (evt) => {
+    props.getConnected();
+  };
+
   return (
     <div>
       <form className="flex flex-col items-center justify-center ">
@@ -122,7 +126,7 @@ function Signin(props) {
             <button onClick={getLoginPage} className="underline text-blue-800">Déja un compte ?</button>
           </div>
           {passOK ? (
-            <p></p>
+            getHomePage()
           ) : (
             <p className="text-red-500 my-2 text-center">
               Erreur: mots de passe différents
