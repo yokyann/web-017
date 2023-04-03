@@ -5,18 +5,8 @@ import "../index.css";
 import Feed from "./Feed";
 
 function MainPage(props) {
-  const [isConnected, setConnect] = useState(false);
-  const [page, setPage] = useState("signin_page");
 
-  const getConnected = () => {
-    setConnect(true);
-    setPage("message_page");
-  };
 
-  const setLogout = () => {
-    setConnect(false);
-    setPage("signin_page");
-  };
 
   return (
     // <Feed></Feed>
@@ -43,20 +33,9 @@ function MainPage(props) {
           {/* colonne 2 */}
           <div className="w-full mt-16 md:mt-0 md:w-2/5">
             <div className="h-auto p-8 py-10 overflow-hidden bg-white border-b-2 border-gray-300 shadow-2xl rounded-lg">
-              {page === "signin_page" ? (
-                // <Signin login={getConnected} />
                 <NavigationPanel
-                  login={getConnected}
-                  logout={setLogout}
-                  isConnected={isConnected}
+                  
                 />
-              ) : (
-                <NavigationPanel
-                  login={getConnected}
-                  logout={setLogout}
-                  isConnected={isConnected}
-                />
-              )}
             </div>
           </div>
         </div>
