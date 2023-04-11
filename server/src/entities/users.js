@@ -1,36 +1,36 @@
 class Users {
   constructor(db) {
-    this.db = db
-    
-    // suite plus tard avec la BD
+    this.db = db;
   }
 
-  create(login, password, lastname, firstname) {
-    return new Promise((resolve, reject) => {
-      let userid = 1; // À remplacer par une requête bd
-      if(false) {
-        //erreur
-        reject();
-      } else {
-        resolve(userid);
-      }
-    });
+  create(lastname, firstname,login, password) {
+    return new Promise( async (resolve, reject) => {
+		console.log(" dans create : ,",lastname, firstname,login, password )
+		this.db.db('birdy').collection('User').insertOne({
+			lastname, firstname, login, password
+		})
+		.then((res) => {
+			console.log("dans create :",res)
+			resolve(res)
+		})
+		.catch((err) => console.log(err))
+	});
   }
 
   get(userid) {
     return new Promise((resolve, reject) => {
       const user = {
-         login: "pikachu",
-         password: "1234",
-         lastname: "chu",
-         firstname: "pika"
+        login: "pikachu",
+        password: "1234",
+        lastname: "chu",
+        firstname: "pika",
       }; // À remplacer par une requête bd
 
-      if(false) {
+      if (false) {
         //erreur
         reject();
       } else {
-        if(userid == 1) {
+        if (userid == 1) {
           resolve(user);
         } else {
           resolve(null);
@@ -41,7 +41,7 @@ class Users {
 
   async exists(login) {
     return new Promise((resolve, reject) => {
-      if(false) {
+      if (false) {
         //erreur
         reject();
       } else {
@@ -53,7 +53,7 @@ class Users {
   checkpassword(login, password) {
     return new Promise((resolve, reject) => {
       let userid = 1; // À remplacer par une requête bd
-      if(false) {
+      if (false) {
         //erreur
         reject();
       } else {
@@ -61,8 +61,6 @@ class Users {
       }
     });
   }
-
 }
 
-exports.default = Users;
-
+module.exports = Users;

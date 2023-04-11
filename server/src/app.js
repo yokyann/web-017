@@ -1,35 +1,55 @@
-const path = require("path");
-const apiUser = require("./api/apiUser.js");
-const apiTweet = require("./api/apiTweet.js");
-const Datastore = require('nedb');
-
-// Détermine le répertoire de base
-const basedir = path.normalize(path.dirname(__dirname));
-console.debug(`Base directory: ${basedir}`);
-
 const express = require('express');
-const app = express();
+const router = express.Router();
+const Users = require("./entities/users");
+const { resolvePath } = require("react-router-dom");
+const jwt = require("jsonwebtoken");
 
-// Session
-const session = require('express-session');
-app.use(session({
-    secret: "technoweb rocks",
-    resave: true,
-    saveUninitialized: true
-}));
+const connectToDB = require("./database");
+const clientPromise = connectToDB();
+let users;
 
-let db = {};
-db.users = new Datastore(`${basedir}/database/users.db`);
-db.tweets = new Datastore(`${basedir}/database/tweets.db`);
-db.users.loadDatabase();
-db.tweets.loadDatabase();
+clientPromise
+  .then((client) => {
+    users = new Users(client);
+  })
+  .catch((error) => {
+    console.error("Error connecting to database: ", error);
+  });
 
-app.use('/api', apiUser.default(db.users, db.tweets));
-app.use('/apiTweet', apiTweet.default(db.tweets, db.users));
-
-// Démarrage du serveur
-app.on('close', () => {
-    db.close();
+router.use(express.json());
+// simple logger for this router's requests
+// all requests to this router will first hit this middleware
+router.use((req, res, next) => {
+  console.log("API: method %s, path %s", req.method, req.path);
+  console.log("Body", req.body);
+  next();
 });
 
-exports.default = app;
+router.post("/user/new", async function (req, res) {
+  console.log(
+    "dans router.post : ",
+    req.body.lastName,
+    req.body.firstName,
+    req.body.login,
+    req.body.pass1
+  );
+
+  if (!users) {
+    res.send("Error: connection to database not established");
+    return;
+  }
+
+  const result = users.create(
+    req.body.lastName,
+    req.body.firstName,
+    req.body.login,
+    req.body.pass1
+  );
+  if (result) {
+    res.send(result.insertedId);
+  } else {
+    res.send("error /user/new");
+  }
+});
+
+module.exports = router;

@@ -19,6 +19,7 @@ function Login(props) {
     props.getConnected();
   };
 
+
   return (
     <div>
       <form
@@ -49,8 +50,9 @@ function Login(props) {
           </div>
           <div className="grid grid-cols-2 gap-4 mt-4 py-2">
             <button
+             
               className="btn border p-2 rounded bg-blue-100 hover:bg-blue-200"
-              onClick={getHomePage}
+            
             >
               Log In
             </button>

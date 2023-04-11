@@ -10,13 +10,14 @@ async function listDatabases(client){
 
 async function connectToDB() {
 
-    const url = 'mongodb+srv://admin:1tz5QiodbevzhJja@birdy.hdf5l2g.mongodb.net/test'
+    const url = 'mongodb+srv://yokyann:rDCQf5yEyqHsRYMx@birdy.sdditpf.mongodb.net/test'
     const client = new MongoClient(url);
 
     try {
         await client.connect();
         await listDatabases(client);
 
+        
     } catch (e) {
         console.error(e);
     }

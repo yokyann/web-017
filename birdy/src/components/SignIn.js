@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../index.css";
+import axios from 'axios'
 
 function Signin(props) {
   const [login, setLogin] = useState("");
@@ -27,14 +28,23 @@ function Signin(props) {
     setPass2(evt.target.value);
   };
 
-  const submissionHandler = (evt) => {
-    if (pass1 === pass2) setPassOK(true);
-    console.log("before");
-    console.log(props.isConnected);
-    props.login();
-    console.log("after");
-    console.log(props.isConnected);
-  };
+  // function getPassword{
+  //   if 
+  // }
+
+  async function submissionHandler(e){
+    e.preventDefault()
+
+    try {
+      console.log(" params : ", firstName, lastName, login, pass1)
+      await axios.post('http://localhost:4000/user/new', {
+        firstName, lastName, login, pass1
+      })
+      .then ((res) => console.log("axios.post('/user/new') : ",res))
+    } catch (error) {
+      console.log("error : ", error)
+    }
+  }
 
   const getLoginPage = (evt) => {
     props.getLogin();
