@@ -12,7 +12,7 @@ class Users {
 
     if (exists) {
       console.log("already exists")
-      alert("Login already exists")
+      res.status(401).send("Login already exists");
     }
     else{
     const result = await this.db.collection('Users').insertOne({
@@ -35,21 +35,11 @@ class Users {
     else{
       res.status(401).send("Invalid login or password");
     }
+    return user;
   }
   
   
 
-  checkpassword(login, password) {
-    return new Promise((resolve, reject) => {
-      let userid = 1; // À remplacer par une requête bd
-      if (false) {
-        //erreur
-        reject();
-      } else {
-        resolve(userid);
-      }
-    });
-  }
 }
 
 module.exports = Users;

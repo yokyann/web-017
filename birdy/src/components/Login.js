@@ -19,28 +19,31 @@ function Login(props) {
   const getHomePage = (evt) => {
     props.getConnected();
   };
+  const setUserInfos = (data) => {
+    props.setUserInfos(data);
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!login || !password) {
       alert("Veuillez remplir tous les champs")
     }
-    else{
+    else {
       try {
         console.log(" params : ", login, password)
         await axios.post('http://localhost:4000/api/user/login', {
           login, password
         })
-        .then ((res) => 
-        console.log("axios.post('/user/login') : ",res),
-        setPassOK(true)
-        )
+          .then((res) => {
+            console.log("axios.post('/user/login') : ", res.data);
+            setUserInfos({ login, password });
+          })
       } catch (error) {
         console.log("error : ", error)
       }
     }
 
-    
+
   };
 
 

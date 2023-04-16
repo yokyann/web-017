@@ -67,6 +67,7 @@ app.post("/user/new", async function (req, res) {
   } else {
     res.send("error /user/new");
   }
+
 });
 
 app.post("/user/login", async (req, res) => {
@@ -83,7 +84,7 @@ app.post("/user/login", async (req, res) => {
   }
 
   // If we reach this point, the user is authenticated
-  res.send("OK");
+  res.send(user);
 });
 
 

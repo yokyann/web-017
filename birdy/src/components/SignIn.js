@@ -61,7 +61,7 @@ function Signin(props) {
           firstName, lastName, login, password
         })
         .then((res) => {
-          console.log("axios.post('/user/new') : ", {firstName, lastName, login, password});
+          console.log("axios.post('/user/new') : ", res);
           setUserInfos({firstName, lastName, login, password});
           setPassOK(true);
         })
