@@ -31,7 +31,7 @@ function NavigationPanel(props) {
     <div>
       <nav id="navigation_pan">
         {connect ? (
-          <Home logout={setLogout} userInfo = {user}></Home>
+          <Home logout={setLogout} userInfos={user}></Home>
         ) : (
           // center the page
           <div className="flex justify-center items-center  w-full p-16 bg-gray-100 xl:px-20 h-screen">
@@ -44,7 +44,7 @@ function NavigationPanel(props) {
                     Huynh Yok Yann et Ding Kevin
                   </p>
                   <h2 className="text-2xl font-extrabold leading-none text-black sm:text-3xl md:text-5xl">
-                  LU3IN017 - Projet Web - Birdy
+                    LU3IN017 - Projet Web - Birdy
                   </h2>
                   <p className="text-xl text-gray-600 md:pr-16">
                     Bienvenue sur Birdy, un clone de twitter en ReactJS
@@ -57,13 +57,13 @@ function NavigationPanel(props) {
                       <Signin
                         getLogin={getLogin}
                         getConnected={getConnected}
-                        setUserInfos = {setUser}
+                        setUserInfos={setUser}
                       ></Signin>
                     ) : (
                       <Login
                         getSignin={getSignIn}
                         getConnected={getConnected}
-                        setUserInfos = {setUser}
+                        setUserInfos={setUser}
                       ></Login>
                     )}
                   </div>

@@ -5,6 +5,7 @@ class Users {
     this.db = db;
   }
 
+  // Create a new user
   async create(lastName, firstName, login, password) {
     console.log("in function create", lastName, firstName, login, password)
     const exists = await this.db.collection('Users').findOne({ login });
@@ -24,6 +25,7 @@ class Users {
     return result;}
   }
 
+  // Login a new user
   async login(login, password, res) {
     console.log("in function create", login, password)
   
@@ -38,6 +40,16 @@ class Users {
     return user;
   }
   
+  // Delete a user
+  // async deleteOne(login) {
+  
+  // update a user login 
+  // async updateOne(login, new_login) {
+
+  // update a user password
+  // async updateOne(login, new_password) {
+
+
   
 
 }

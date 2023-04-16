@@ -3,8 +3,6 @@ import "../index.css";
 
 function MainPage(props) {
 
-
-
   return (
     <NavigationPanel></NavigationPanel>
     

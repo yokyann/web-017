@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "../index.css";
-import axios from 'axios'
+import axios from "axios";
 
 function Signin(props) {
   const [login, setLogin] = useState("");
@@ -28,47 +28,48 @@ function Signin(props) {
     setPass2(evt.target.value);
   };
 
-  
   const setUserInfos = (data) => {
     props.setUserInfos(data);
-  }
+  };
 
   useEffect(() => {
     setPassword(pass1);
-  }, [pass1])
+  }, [pass1]);
 
-  async function submissionHandler(e){   
-     e.preventDefault()
+  async function submissionHandler(e) {
+    e.preventDefault();
 
-     if (pass1 !== pass2) {
+    if (pass1 !== pass2) {
       alert("Les mots de passe ne correspondent pas");
       return;
     }
-    
+
     if (pass1.length < 6) {
       alert("Le mot de passe doit faire au moins 6 caractères");
       return;
-    }
-    else{
-    if ( !firstName || !lastName || !login || !password) {
-      alert("Veuillez remplir tous les champs")
-      return;
-    }
-    else{
-      try {
-        console.log(" params : ", firstName, lastName, login, password)
-        await axios.post('http://localhost:4000/api/user/new', {
-          firstName, lastName, login, password
-        })
-        .then((res) => {
-          console.log("axios.post('/user/new') : ", res);
-          setUserInfos({firstName, lastName, login, password});
-          setPassOK(true);
-        })
-      } catch (error) {
-        console.log("error : ", error)
+    } else {
+      if (!firstName || !lastName || !login || !password) {
+        alert("Veuillez remplir tous les champs");
+        return;
+      } else {
+        try {
+          console.log(" params : ", firstName, lastName, login, password);
+          await axios
+            .post("http://localhost:4000/api/user/new", {
+              firstName,
+              lastName,
+              login,
+              password,
+            })
+            .then((res) => {
+              console.log("axios.post('/user/new') : ", res);
+              setUserInfos({ firstName, lastName, login, password });
+              setPassOK(true);
+            });
+        } catch (error) {
+          console.log("error : ", error);
+        }
       }
-    }
     }
   }
 
@@ -79,7 +80,6 @@ function Signin(props) {
   const getHomePage = (evt) => {
     props.getConnected();
   };
-
 
   return (
     <div>
@@ -160,14 +160,11 @@ function Signin(props) {
             </button>
           </div>
           <div>
-            <button onClick={getLoginPage} className="underline text-blue-800">Déja un compte ?</button>
+            <button onClick={getLoginPage} className="underline text-blue-800">
+              Déja un compte ?
+            </button>
           </div>
-          {passOK ? (
-            getHomePage()
-          ) : (
-            <p >
-            </p>
-          )}
+          {passOK ? getHomePage() : <p></p>}
         </div>
       </form>
     </div>
