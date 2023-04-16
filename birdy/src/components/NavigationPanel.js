@@ -40,15 +40,13 @@ function NavigationPanel(props) {
                 {/* colonne 1 */}
                 <div className="w-full space-y-5 md:w-3/5 md:pr-16">
                   <p className="font-medium text-blue-500 uppercase">
-                    petit truc fancy
+                    Huynh Yok Yann et Ding Kevin
                   </p>
                   <h2 className="text-2xl font-extrabold leading-none text-black sm:text-3xl md:text-5xl">
-                    Un autre titre stylé
+                  LU3IN017 - Projet Web - Birdy
                   </h2>
                   <p className="text-xl text-gray-600 md:pr-16">
-                    Learn how to engage with your visitors and teach them about
-                    your mission. We're revolutionizing the way customers and
-                    businesses interact.
+                    Bienvenue sur Birdy, un clone de twitter en ReactJS
                   </p>
                 </div>
                 {/* colonne 2 */}

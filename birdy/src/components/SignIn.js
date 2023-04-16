@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../index.css";
 import axios from 'axios'
 
@@ -28,21 +28,41 @@ function Signin(props) {
     setPass2(evt.target.value);
   };
 
-  // function getPassword{
-  //   if 
-  // }
+  function getPassword(){
+    if (pass1 == pass2 ){
+      setPassword(pass1)
+      setPassOK(true)
+    }
 
-  async function submissionHandler(e){
-    e.preventDefault()
+    
+  }
 
-    try {
-      console.log(" params : ", firstName, lastName, login, pass1)
-      await axios.post('http://localhost:4000/user/new', {
-        firstName, lastName, login, pass1
-      })
-      .then ((res) => console.log("axios.post('/user/new') : ",res))
-    } catch (error) {
-      console.log("error : ", error)
+  useEffect(() => {
+    setPassword(pass1);
+  }, [pass1])
+
+  async function submissionHandler(e){   
+     e.preventDefault()
+
+    getPassword()
+    if (!passOK){
+      alert("Les mots de passe ne correspondent pas")
+    }
+    else{
+    if ( !firstName || !lastName || !login || !password) {
+      alert("Veuillez remplir tous les champs")
+    }
+    else{
+      try {
+        console.log(" params : ", firstName, lastName, login, password)
+        await axios.post('http://localhost:4000/api/user/new', {
+          firstName, lastName, login, password
+        })
+        .then ((res) => console.log("axios.post('/user/new') : ",res))
+      } catch (error) {
+        console.log("error : ", error)
+      }
+    }
     }
   }
 
@@ -53,6 +73,7 @@ function Signin(props) {
   const getHomePage = (evt) => {
     props.getConnected();
   };
+
 
   return (
     <div>
@@ -136,7 +157,8 @@ function Signin(props) {
             <button onClick={getLoginPage} className="underline text-blue-800">Déja un compte ?</button>
           </div>
           {passOK ? (
-            getHomePage()
+            <p></p>
+            // getHomePage()
           ) : (
             <p className="text-red-500 my-2 text-center">
               Erreur: mots de passe différents

@@ -1,5 +1,7 @@
+const { ObjectId } = require('mongodb');
+
 const express = require("express");
-const Users = require("./entities/users.js");
+const Users = require("../entities/users.js");
 
 function init(db) {
     const router = express.Router();
@@ -12,7 +14,7 @@ function init(db) {
         console.log('Body', req.body);
         next();
     });
-    const users = new Users.default(db);
+    const users = new Users(db);
 
     router.post("/user/new", async function (req, res) {
         console.log(
@@ -20,8 +22,9 @@ function init(db) {
             req.body.lastName,
             req.body.firstName,
             req.body.login,
-            req.body.pass1
+            req.body.password
         );
+        if (!req.body.lastName || !req.body.firstName || !req.body.login || !req.body.password) {
 
         if (!users) {
             res.send("Error: connection to database not established");
@@ -32,7 +35,7 @@ function init(db) {
             req.body.lastName,
             req.body.firstName,
             req.body.login,
-            req.body.pass1
+            req.body.password
         );
         if (result) {
             res.send(result.insertedId);

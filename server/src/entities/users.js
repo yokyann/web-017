@@ -1,21 +1,29 @@
+const { ObjectId } = require('mongodb');
+
 class Users {
   constructor(db) {
     this.db = db;
   }
 
-  create(lastname, firstname,login, password) {
-    return new Promise( async (resolve, reject) => {
-		console.log(" dans create : ,",lastname, firstname,login, password )
-		this.db.db('birdy').collection('User').insertOne({
-			lastname, firstname, login, password
-		})
-		.then((res) => {
-			console.log("dans create :",res)
-			resolve(res)
-		})
-		.catch((err) => console.log(err))
-	});
+  async create(lastName, firstName, login, password) {
+    console.log("in function create", lastName, firstName, login, password)
+    const exists = await this.db.collection('Users').findOne({ login });
+    console.log("exists", exists)
+
+    if (exists) {
+      console.log("already exists")
+      return null;
+    }
+    const result = await this.db.collection('Users').insertOne({
+      lastName,
+      firstName,
+      login,
+      password,
+    });
+    return result;
   }
+  
+  
 
   get(userid) {
     return new Promise((resolve, reject) => {
@@ -39,16 +47,7 @@ class Users {
     });
   }
 
-  async exists(login) {
-    return new Promise((resolve, reject) => {
-      if (false) {
-        //erreur
-        reject();
-      } else {
-        resolve(true);
-      }
-    });
-  }
+  
 
   checkpassword(login, password) {
     return new Promise((resolve, reject) => {

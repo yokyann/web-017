@@ -24,7 +24,4 @@ async function connectToDB() {
 
     return client;
 }
-
-connectToDB().catch(console.error)
-
 module.exports = connectToDB;
