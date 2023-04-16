@@ -12,41 +12,31 @@ class Users {
 
     if (exists) {
       console.log("already exists")
-      return null;
+      alert("Login already exists")
     }
+    else{
     const result = await this.db.collection('Users').insertOne({
       lastName,
       firstName,
       login,
       password,
     });
-    return result;
-  }
-  
-  
-
-  get(userid) {
-    return new Promise((resolve, reject) => {
-      const user = {
-        login: "pikachu",
-        password: "1234",
-        lastname: "chu",
-        firstname: "pika",
-      }; // À remplacer par une requête bd
-
-      if (false) {
-        //erreur
-        reject();
-      } else {
-        if (userid == 1) {
-          resolve(user);
-        } else {
-          resolve(null);
-        }
-      }
-    });
+    return result;}
   }
 
+  async login(login, password, res) {
+    console.log("in function create", login, password)
+  
+    const user = await this.db.collection('Users').findOne({ login, password });
+    if (user) {
+      console.log("user found")
+      return user;
+    }
+    else{
+      res.status(401).send("Invalid login or password");
+    }
+  }
+  
   
 
   checkpassword(login, password) {

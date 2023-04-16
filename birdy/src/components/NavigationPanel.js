@@ -7,6 +7,7 @@ import Home from "../pages/Home";
 function NavigationPanel(props) {
   const [page, setPage] = useState("login_page");
   const [connect, setConnect] = useState(false);
+  const [user, setUser] = useState({});
 
   const getConnected = () => {
     setConnect(true);
@@ -30,7 +31,7 @@ function NavigationPanel(props) {
     <div>
       <nav id="navigation_pan">
         {connect ? (
-          <Home logout={setLogout}></Home>
+          <Home logout={setLogout} userInfo = {user}></Home>
         ) : (
           // center the page
           <div className="flex justify-center items-center  w-full p-16 bg-gray-100 xl:px-20 h-screen">
@@ -56,11 +57,13 @@ function NavigationPanel(props) {
                       <Signin
                         getLogin={getLogin}
                         getConnected={getConnected}
+                        setUserInfos = {setUser}
                       ></Signin>
                     ) : (
                       <Login
                         getSignin={getSignIn}
                         getConnected={getConnected}
+                        setUserInfos = {setUser}
                       ></Login>
                     )}
                   </div>

@@ -1,8 +1,10 @@
 import { useState } from "react";
+import axios from 'axios';
 
 function Login(props) {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
+  const [passOK, setPassOK] = useState(false);
 
   const getLogin = (evt) => {
     setLogin(evt.target.value);
@@ -14,9 +16,31 @@ function Login(props) {
   const getSignInPage = (evt) => {
     props.getSignin();
   };
-
   const getHomePage = (evt) => {
     props.getConnected();
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!login || !password) {
+      alert("Veuillez remplir tous les champs")
+    }
+    else{
+      try {
+        console.log(" params : ", login, password)
+        await axios.post('http://localhost:4000/api/user/login', {
+          login, password
+        })
+        .then ((res) => 
+        console.log("axios.post('/user/login') : ",res),
+        setPassOK(true)
+        )
+      } catch (error) {
+        console.log("error : ", error)
+      }
+    }
+
+    
   };
 
 
@@ -50,9 +74,10 @@ function Login(props) {
           </div>
           <div className="grid grid-cols-2 gap-4 mt-4 py-2">
             <button
-             
+              type="submit"
+              onClick={handleSubmit}
               className="btn border p-2 rounded bg-blue-100 hover:bg-blue-200"
-            
+
             >
               Log In
             </button>
@@ -67,7 +92,14 @@ function Login(props) {
             <button onClick={getSignInPage} className="underline text-blue-800">
               Pas encore de compte ?
             </button>
+
           </div>
+          {passOK ? (
+            getHomePage()
+          ) : (
+            <p >
+            </p>
+          )}
         </div>
       </form>
     </div>

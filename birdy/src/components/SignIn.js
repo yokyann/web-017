@@ -28,13 +28,9 @@ function Signin(props) {
     setPass2(evt.target.value);
   };
 
-  function getPassword(){
-    if (pass1 == pass2 ){
-      setPassword(pass1)
-      setPassOK(true)
-    }
-
-    
+  
+  const setUserInfos = (data) => {
+    props.setUserInfos(data);
   }
 
   useEffect(() => {
@@ -44,13 +40,19 @@ function Signin(props) {
   async function submissionHandler(e){   
      e.preventDefault()
 
-    getPassword()
-    if (!passOK){
-      alert("Les mots de passe ne correspondent pas")
+     if (pass1 !== pass2) {
+      alert("Les mots de passe ne correspondent pas");
+      return;
+    }
+    
+    if (pass1.length < 6) {
+      alert("Le mot de passe doit faire au moins 6 caractères");
+      return;
     }
     else{
     if ( !firstName || !lastName || !login || !password) {
       alert("Veuillez remplir tous les champs")
+      return;
     }
     else{
       try {
@@ -58,7 +60,11 @@ function Signin(props) {
         await axios.post('http://localhost:4000/api/user/new', {
           firstName, lastName, login, password
         })
-        .then ((res) => console.log("axios.post('/user/new') : ",res))
+        .then((res) => {
+          console.log("axios.post('/user/new') : ", {firstName, lastName, login, password});
+          setUserInfos({firstName, lastName, login, password});
+          setPassOK(true);
+        })
       } catch (error) {
         console.log("error : ", error)
       }
@@ -157,11 +163,9 @@ function Signin(props) {
             <button onClick={getLoginPage} className="underline text-blue-800">Déja un compte ?</button>
           </div>
           {passOK ? (
-            <p></p>
-            // getHomePage()
+            getHomePage()
           ) : (
-            <p className="text-red-500 my-2 text-center">
-              Erreur: mots de passe différents
+            <p >
             </p>
           )}
         </div>

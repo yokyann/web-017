@@ -1,4 +1,5 @@
 function Home(props) {
+  console.log("props from Home : ", props)
   return (
     <div className="flex flex-col items-center md:flex-row">
       {/* colonne 1 side bar */}

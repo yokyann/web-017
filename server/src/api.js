@@ -69,4 +69,23 @@ app.post("/user/new", async function (req, res) {
   }
 });
 
+app.post("/user/login", async (req, res) => {
+  if (!users) {
+    res.send("Error: connection to database not established");
+    return;
+  }
+  
+  const { login, password } = req.body;
+  
+  const user = await users.login(login, password, res); 
+  if (!user) {
+    return; // terminate the function early if the login failed
+  }
+
+  // If we reach this point, the user is authenticated
+  res.send("OK");
+});
+
+
+
 module.exports = app;
