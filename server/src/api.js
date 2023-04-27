@@ -59,40 +59,34 @@ app.use((req, res, next) => {
 app.post("/user/new", async (req, res) => {
   const { lastName, firstName, login, password } = req.body;
   try {
-    const result = await users.create(
+    await users.create(
       lastName,
       firstName,
       login,
       password,
-      req,
-      res,
-    );
-    res.status(201).send(result);
+    )
+    .then((result) => {
+      console.log("result SIGNING", result)
+      const token = jwt.sign({myuser : result}, 'key');
+      res.status(200).send( token);
+    })
   } catch (error) {
     res.status(400).send(error.message);
   }
 });
 
-// Get current user
-app.get("/user/current", async (req, res) => {
-  const currentUser = req.session.user;
-  if (!currentUser) {
-    return res.status(401).send("Not authenticated");
-  }
-
-  res.send(currentUser);
-});
-
-// Login an existing user
 // Login an existing user
 app.post('/user/login', async (req, res) => {
   const { login, password } = req.body;
   try {
-    const user = await users.login(login, password);
-    console.log("user FROM API", user)
-    // const token = jwt.sign({ id: user._id, firstName: user.firstName, lastName: user.lastName, login: user.login, followers : user.followers, followings: user.followings, blocked_users : blocked_users }, 'key');
-    const token = jwt.sign({myuser : user}, 'key');
-    res.status(200).send( token);
+    await users.login(login, password)
+    .then((result) => {
+      console.log("user FROM API", result)
+      // const token = jwt.sign({ id: user._id, firstName: user.firstName, lastName: user.lastName, login: user.login, followers : user.followers, followings: user.followings, blocked_users : blocked_users }, 'key');
+      const token = jwt.sign({myuser : result}, 'key');
+      res.status(200).send( token);
+    })
+    .catch(err => console.log("Ya une erreur dans le router.post ", err))
   } catch (error) {
     res.status(401).send("Incorrect login or password");
   }

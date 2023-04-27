@@ -12,6 +12,9 @@ function Signin(props) {
   const [pass1, setPass1] = useState("");
   const [pass2, setPass2] = useState("");
 
+  const loginPage = () => {
+    props.handleLogin();
+  };
   const getLogin = (evt) => {
     setLogin(evt.target.value);
   };
@@ -28,9 +31,6 @@ function Signin(props) {
     setPass2(evt.target.value);
   };
 
-  const setUserInfos = (data) => {
-    props.setUserInfos(data);
-  };
 
   useEffect(() => {
     setPassword(pass1);
@@ -62,9 +62,27 @@ function Signin(props) {
               password,
             })
             .then((res) => {
-              console.log("axios.post('/user/new') : ", res);
-              setUserInfos({ firstName, lastName, login, password });
-              setPassOK(true);
+              // console.log("axios.post('/user/new') : ", res);
+              // const token = res.data;
+              // setPassOK(true);
+              // localStorage.setItem("token", token);
+              // console.log("HERE BABY")
+              // console.log(localStorage.getItem("token"));
+              // const myuser = props.getUserfromToken(token);
+              // if (myuser) {
+              //   props.setUser(myuser);
+              //   props.getConnected();
+              // }
+              if (res.data){
+                setPassOK(true);
+                const token = res.data;
+                localStorage.setItem("token", token);
+                const myuser = props.getUserfromToken(token);
+                if (myuser) {
+                  props.setUser(myuser);
+                  props.getConnected();
+                }
+              }
             });
         } catch (error) {
           console.log("error : ", error);
@@ -160,7 +178,7 @@ function Signin(props) {
             </button>
           </div>
           <div>
-            <button onClick={getLoginPage} className="underline text-blue-800">
+            <button onClick={loginPage} className="underline text-blue-800">
               Déja un compte ?
             </button>
           </div>

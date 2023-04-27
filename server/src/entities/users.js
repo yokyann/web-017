@@ -10,11 +10,6 @@ class Users {
     firstName,
     login,
     password,
-    blocked_users,
-    followers,
-    followings,
-    req,
-    res
   ) {
     console.log("in function create", lastName, firstName, login, password);
     const exists = await this.db.collection("Users").findOne({ login });
@@ -34,7 +29,7 @@ class Users {
         followings: [],
       });
       if (result) {
-        return res.send(user);
+        return result;
       } else {
         return res.send("Failed to create user");
       }

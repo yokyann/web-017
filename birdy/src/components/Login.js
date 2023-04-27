@@ -83,7 +83,7 @@ function Login(props) {
             </button>
           </div>
           <div>
-            <button className="underline text-blue-800">
+            <button onClick={props.handleSignIn} className="underline text-blue-800">
               Don't have an account yet?
             </button>
           </div>

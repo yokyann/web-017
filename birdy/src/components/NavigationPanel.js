@@ -63,7 +63,7 @@ console.log("connected",connected)
   return (
     <div>
       <nav id="navigation_pan">
-        {connected ? (
+        {connected && page === "home_page" ? (
           <Home user={user} setLogout={setLogout} />
         ) : (
           // center the page
@@ -90,10 +90,13 @@ console.log("connected",connected)
                       // Render SignUp component here
                       <div>SignUp component</div>
                     ) : page === "signin_page" ? (
-                      <Signin handleLogin={handleLogin} />
+                      <Signin handleLogin={handleLogin} 
+                        getUserfromToken={getUserfromToken}
+                        setUser={setUser}
+                        getConnected={getConnected}/>
                     ) : (
                       <Login
-                        handleLogin={handleLogin}
+                        handleSignIn={handleSignIn}
                         getUserfromToken={getUserfromToken}
                         setUser={setUser}
                         getConnected={getConnected}
