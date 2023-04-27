@@ -30,16 +30,22 @@ function Login(props) {
     } else {
       try {
         console.log(" params : ", login, password);
-        await axios
-          .post("http://localhost:4000/api/user/login", {
+        const response = await axios.post(
+          "http://localhost:4000/api/user/login",
+          {
             login,
             password,
-          })
-          .then((res) => {
-            console.log("axios.post('/user/login') : ", res.data);
-            setUserInfos({ login, password });
-            setPassOK(true);
-          });
+          }
+        );
+        if (response.data) {
+          console.log("axios.post('/user/login') : ", response.data);
+          setUserInfos({ login, password });
+          setPassOK(true);
+          // store token in localStorage
+          localStorage.setItem("token", response.data.token);
+        } else {
+          alert("Login ou mot de passe incorrect");
+        }
       } catch (error) {
         console.log("error : ", error);
       }

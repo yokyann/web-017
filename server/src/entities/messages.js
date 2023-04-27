@@ -5,18 +5,20 @@ class Messages {
         this.db = db;
     }
 
-    // Create a new user
-    async create(message, comments, likes, author_login) {
-        console.log("in function create", message, comments, likes, author_login)
-
+    // Create a new message
+    async create(message, comments, author_login, liked_by) {
+        console.log("in function create", message, comments, author_login, liked_by)
+      
         const result = await this.db.collection('Messages').insertOne({
-            message,
-            comments,
-            likes,
-            author_login
+          message,
+          comments,
+          author_login,
+          liked_by,
+          date_creation: new Date()
         });
         return result;
-    }
+      }
+      
 
 
     // Get all messages
@@ -26,23 +28,28 @@ class Messages {
     }
 
     // Get a user's messages
-    async getOne(login) {
+    async getUserMessages(login) {
         const messages = await this.db.collection('Messages').find({ author_login: login }).toArray();
         return messages;
     }
 
     // Update a user's messages
-    // async updateOne(login, message, new_message, comments, likes, author_login) 
+    // async updateMessage(login, message, new_message, comments, likes, author_login) 
 
     // Delete a user's messages
-    // async deleteOne(id) 
+    // async deleteMessage(id) 
 
     // Like a message
-    // async likeOne(login, message, likes, author_login) 
+    // async like(login, message, likes, author_login) 
 
     // Comment a message
-    // async commentOne(login, message, comments, author_login)
+    // async commentMessage(login, message, comments, author_login)
 
+    // Remove a like 
+    // async removeLike(login, message, likes, author_login)
+
+    // Remove a comment
+    // async removeComment(login, message, comments, author_login)
 
 }
 

@@ -14,7 +14,6 @@ class Friends {
   // Get all friends of one user 
   // async getOne(login) {
   
-  // Get all friends of all users ?
 
 }
 

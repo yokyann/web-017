@@ -4,7 +4,7 @@ function Message({ message }) {
         <div>{message.author_login}</div>
         <div>{message.message}</div>
         <div>
-            <div>Likes : </div>
+            <div>Likes : {message.liked_by}</div>
             <div>Comments : </div>
         </div>
 

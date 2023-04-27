@@ -9,7 +9,6 @@ function Home(props) {
   const [messages, setMessages] = useState([]);
   const [following, setFollowing] = useState(false);
 
-  useEffect(() => {
     async function fetchMessages() {
       try {
         const res = await axios.get("http://localhost:4000/api/messages");
@@ -19,8 +18,10 @@ function Home(props) {
         console.log("error : ", error);
       }
     }
-    fetchMessages();
-  }, []);
+
+    useEffect(() => {
+      fetchMessages();
+    }, []);
 
   return (
     <div className="flex flex-col items-center md:flex-row ">

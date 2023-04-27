@@ -4,6 +4,7 @@ const Users = require("./entities/users");
 const Messages = require("./entities/messages");
 const Friends = require("./entities/friends");
 const cors = require('cors');
+
 app.use(cors());
 
 const connectToDB = require("./database");
@@ -12,6 +13,7 @@ let users;
 let messages;
 let friends;
 let db;
+
 
 clientPromise
   .then((client) => {
@@ -51,51 +53,51 @@ app.use((req, res, next) => {
 });
 
 // Create new user
-app.post("/user/new", async function (req, res) {
-  console.log(
-    "dans router.post : ",
-    req.body.lastName,
-    req.body.firstName,
-    req.body.login,
-    req.body.password
+app.post("/user/new", async (req, res) => {
+  const { lastName, firstName, login, password } = req.body;
+  const result = await users.create(
+    lastName,
+    firstName,
+    login,
+    password,
+    req,
+    res,
   );
-
-  if (!users) {
-    res.send("Error: connection to database not established");
-    return;
-  }
-
-  const result = users.create(
-    req.body.lastName,
-    req.body.firstName,
-    req.body.login,
-    req.body.password
-  );
-  if (result) {
-    res.send(result.insertedId);
-  } else {
-    res.send("error /user/new");
-  }
-
 });
 
-// Login a existing user
-app.post("/user/login", async (req, res) => {
-  if (!users) {
-    res.send("Error: connection to database not established");
-    return;
+// Get current user
+app.get("/user/current", async (req, res) => {
+  const currentUser = req.session.user;
+  if (!currentUser) {
+    return res.status(401).send("Not authenticated");
   }
 
+  res.send(currentUser);
+});
+
+// Login an existing user
+app.post('/user/login', async (req, res) => {
   const { login, password } = req.body;
-
-  const user = await users.login(login, password, res);
-  if (!user) {
-    return;
+  const user = await users.login(login, password, req, res);
+  if (user) {
+    res.status(200).send(user);
+  } else {
+    res.status(401).send("Invalid login or password");
   }
-
-
-  res.send(user);
 });
+
+// Logout current user
+app.post("/user/logout", async (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session: ", err);
+      res.status(500).send("Error destroying session");
+    } else {
+      res.send("Logged out successfully");
+    }
+  });
+});
+
 
 // get all messages
 
@@ -112,5 +114,59 @@ app.get("/messages", async (req, res) => {
   })
     .catch(err => console.log("Ya une erreur dans le router.get ", err))
 })
+
+// delete a user
+app.delete("/user/delete", async (req, res) => {
+  const { login } = req.body;
+  const result = await users.deleteUser(login)
+  .then((result) => {
+    if (result) {
+      console.log("result", result)
+      res.send(result)
+    } else {
+      res.send('erreur lors de deleteUser')
+    }
+  })
+});
+
+// get a user's all messages
+app.get("/messages/user", async (req, res) => {
+  const { login } = req.query;
+  const result = await messages.getUserMessages(login)
+  .then((result) => {
+    if (result) {
+      console.log("result", result)
+      res.send(result)
+    } else {
+      res.send('erreur lors de getUserMessages')
+    }
+  })
+});
+
+
+// addlike
+// app.patch("/messages/addlike", async (req, res) => {
+
+// update user login
+// app.patch("/user/update/login", async (req, res) => {
+
+// update user password
+// app.patch("/user/update/password", async (req, res) => {
+
+
+// delete user message
+// app.delete("/user/message/delete", async (req, res) => {
+
+// update user message
+// app.update("/user/message/update", async (req, res) => {
+
+// addcomment
+// app.update("/messages/addcomment", async (req, res) => {
+
+// delete a like
+// app.delete("/messages/deletelike", async (req, res) => {
+
+// delete a comment
+// app.delete("/messages/deletecomment", async (req, res) => {
 
 module.exports = app;
