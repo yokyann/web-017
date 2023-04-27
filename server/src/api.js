@@ -4,6 +4,7 @@ const Users = require("./entities/users");
 const Messages = require("./entities/messages");
 const Friends = require("./entities/friends");
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 app.use(cors());
 
@@ -52,17 +53,24 @@ app.use((req, res, next) => {
   next();
 });
 
+
+
 // Create new user
 app.post("/user/new", async (req, res) => {
   const { lastName, firstName, login, password } = req.body;
-  const result = await users.create(
-    lastName,
-    firstName,
-    login,
-    password,
-    req,
-    res,
-  );
+  try {
+    const result = await users.create(
+      lastName,
+      firstName,
+      login,
+      password,
+      req,
+      res,
+    );
+    res.status(201).send(result);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 });
 
 // Get current user
@@ -76,15 +84,21 @@ app.get("/user/current", async (req, res) => {
 });
 
 // Login an existing user
+// Login an existing user
 app.post('/user/login', async (req, res) => {
   const { login, password } = req.body;
-  const user = await users.login(login, password, req, res);
-  if (user) {
-    res.status(200).send(user);
-  } else {
-    res.status(401).send("Invalid login or password");
+  try {
+    const user = await users.login(login, password);
+    console.log("user FROM API", user)
+    // const token = jwt.sign({ id: user._id, firstName: user.firstName, lastName: user.lastName, login: user.login, followers : user.followers, followings: user.followings, blocked_users : blocked_users }, 'key');
+    const token = jwt.sign({myuser : user}, 'key');
+    res.status(200).send( token);
+  } catch (error) {
+    res.status(401).send("Incorrect login or password");
   }
 });
+
+
 
 // Logout current user
 app.post("/user/logout", async (req, res) => {

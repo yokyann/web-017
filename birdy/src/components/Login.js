@@ -4,63 +4,49 @@ import axios from "axios";
 function Login(props) {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
-  const [passOK, setPassOK] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const getLogin = (evt) => {
-    setLogin(evt.target.value);
-  };
-  const getPassword = (evt) => {
-    setPassword(evt.target.value);
-  };
-
-  const getSignInPage = (evt) => {
-    props.getSignin();
-  };
-  const getHomePage = (evt) => {
-    props.getConnected();
-  };
-  const setUserInfos = (data) => {
-    props.setUserInfos(data);
-  };
-
-  const handleSubmit = async (event) => {
+  const handleLoginFormSubmit = async (event) => {
     event.preventDefault();
+  
     if (!login || !password) {
-      alert("Veuillez remplir tous les champs");
-    } else {
-      try {
-        console.log(" params : ", login, password);
-        const response = await axios.post(
-          "http://localhost:4000/api/user/login",
-          {
-            login,
-            password,
-          }
-        );
-        if (response.data) {
-          console.log("axios.post('/user/login') : ", response.data);
-          setUserInfos({ login, password });
-          setPassOK(true);
-          // store token in localStorage
-          localStorage.setItem("token", response.data.token);
-        } else {
-          alert("Login ou mot de passe incorrect");
+      setErrorMessage("Please fill in all fields.");
+      return;
+    }
+  
+    try {
+      const response = await axios.post("http://localhost:4000/api/user/login", {
+        login,
+        password,
+      });
+  
+      if (response.data) {
+        const token = response.data;
+        localStorage.setItem("token", token);
+  
+        const myuser = props.getUserfromToken(token);
+        if (myuser) {
+          props.setUser(myuser);
+          props.getConnected();
         }
-      } catch (error) {
-        console.log("error : ", error);
+      } else {
+        setErrorMessage("Invalid login or password.");
       }
+    } catch (error) {
+      console.log("Error: ", error);
+      setErrorMessage("An error occurred. Please try again later.");
     }
   };
-
+  
+  
   return (
     <div>
       <form
-        method="POST"
-        action=""
-        className="flex flex-col items-center justify-center "
+        onSubmit={handleLoginFormSubmit}
+        className="flex flex-col items-center justify-center"
       >
         <div className="text-center my-2">
-          <h1 className="text-4xl font-semibold ">Login</h1>
+          <h1 className="text-4xl font-semibold">Login</h1>
         </div>
         <div className="w-10/12 sm:w-8/12 md:w-6/12 lg:w-5/12 xl:w-10/12 mb-6">
           <div>
@@ -68,39 +54,42 @@ function Login(props) {
             <input
               className="my-2 p-2 appearance-none block w-full placeholder-gray-400 rounded border focus:border-teal-500"
               id="login"
-              onChange={getLogin}
+              value={login}
+              onChange={(evt) => setLogin(evt.target.value)}
             />
           </div>
           <div>
-            <label htmlFor="mdp">Mot de passe</label>
+            <label htmlFor="password">Password</label>
             <input
               className="my-2 p-2 appearance-none block w-full placeholder-gray-400 rounded border focus:border-teal-500"
               type="password"
-              id="mdp"
-              onChange={getPassword}
+              id="password"
+              value={password}
+              onChange={(evt) => setPassword(evt.target.value)}
             />
           </div>
           <div className="grid grid-cols-2 gap-4 mt-4 py-2">
             <button
               type="submit"
-              onClick={handleSubmit}
               className="btn border p-2 rounded bg-blue-100 hover:bg-blue-200"
             >
               Log In
             </button>
             <button
-              className="btn border p-2 rounded bg-red-100 hover:bg-red-200"
               type="reset"
+              className="btn border p-2 rounded bg-red-100 hover:bg-red-200"
             >
-              Annuler
+              Cancel
             </button>
           </div>
           <div>
-            <button onClick={getSignInPage} className="underline text-blue-800">
-              Pas encore de compte ?
+            <button className="underline text-blue-800">
+              Don't have an account yet?
             </button>
           </div>
-          {passOK ? getHomePage() : <p></p>}
+          {errorMessage && (
+            <p className="text-red-500 text-sm">{errorMessage}</p>
+          )}
         </div>
       </form>
     </div>

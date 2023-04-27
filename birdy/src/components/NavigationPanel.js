@@ -1,40 +1,73 @@
-import Login from "./Login";
-import Logout from "./Logout";
-import { useState } from "react";
-import Signin from "./SignIn";
+import { useState, useEffect } from "react";
 import Home from "../pages/Home";
+import Login from "./Login";
+import Signin from "./SignIn";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 function NavigationPanel(props) {
+  
   const [page, setPage] = useState("login_page");
-  const [connect, setConnect] = useState(false);
+  const [connected, setConnected] = useState(false);
   const [user, setUser] = useState({});
 
-  const getConnected = () => {
-    setConnect(true);
-    setPage("message_page");
-  };
+  function getUserfromToken(token) {
+    try {
+      const decodedToken = jwt_decode(token);
+      console.log("DECODED TOKEN", decodedToken)
+      return decodedToken.myuser;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
 
-  const setLogout = () => {
-    setConnect(false);
+
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+  
+    if (token) {
+      const myuser = getUserfromToken(token);
+  
+      if (myuser) {
+        setUser(myuser);
+        setConnected(true);
+      } 
+    } else {
+      setConnected(false);
+    }
+  }, []);
+  
+
+  function getConnected() {
+    setPage("home_page");
+    setConnected(true);
+  }
+      
+
+  function setLogout(){
+    setPage("login_page")
+    setConnected(false);
+  }
+  
+
+  const handleSignIn = () => {
     setPage("signin_page");
   };
 
-  const getSignIn = () => {
-    setPage("signin_page");
-  };
-
-  const getLogin = () => {
+  const handleLogin = () => {
     setPage("login_page");
   };
-
+console.log("connected",connected)
   return (
     <div>
       <nav id="navigation_pan">
-        {connect ? (
-          <Home logout={setLogout} userInfos={user}></Home>
+        {connected ? (
+          <Home user={user} setLogout={setLogout} />
         ) : (
           // center the page
-          <div className="flex justify-center items-center  w-full p-16 bg-gray-100 xl:px-20 h-screen">
+          <div className="flex justify-center items-center w-full p-16 bg-gray-100 xl:px-20 h-screen">
             <div className="">
               {/* page divisé en 2 colonne */}
               <div className="flex flex-col items-center md:flex-row">
@@ -53,18 +86,18 @@ function NavigationPanel(props) {
                 {/* colonne 2 */}
                 <div className="w-full mt-16 md:mt-0 md:w-2/5">
                   <div className="h-auto p-8 py-10 overflow-hidden bg-white border-b-2 border-gray-300 shadow-2xl rounded-lg">
-                    {page === "signin_page" ? (
-                      <Signin
-                        getLogin={getLogin}
-                        getConnected={getConnected}
-                        setUserInfos={setUser}
-                      ></Signin>
+                    {page === "signup_page" ? (
+                      // Render SignUp component here
+                      <div>SignUp component</div>
+                    ) : page === "signin_page" ? (
+                      <Signin handleLogin={handleLogin} />
                     ) : (
                       <Login
-                        getSignin={getSignIn}
+                        handleLogin={handleLogin}
+                        getUserfromToken={getUserfromToken}
+                        setUser={setUser}
                         getConnected={getConnected}
-                        setUserInfos={setUser}
-                      ></Login>
+                      />
                     )}
                   </div>
                 </div>
@@ -76,4 +109,5 @@ function NavigationPanel(props) {
     </div>
   );
 }
-export default NavigationPanel;
+
+export default NavigationPanel

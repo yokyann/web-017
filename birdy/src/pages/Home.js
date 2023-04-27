@@ -5,7 +5,7 @@ import axios from "axios";
 
 function Home(props) {
   console.log("props from Home : ", props);
-  const login = props.userInfos.login;
+  const login = props.user.login;
   const [messages, setMessages] = useState([]);
   const [following, setFollowing] = useState(false);
 
@@ -23,6 +23,7 @@ function Home(props) {
       fetchMessages();
     }, []);
 
+
   return (
     <div className="flex flex-col items-center md:flex-row ">
       {/* colonne 1 side bar */}
@@ -33,7 +34,7 @@ function Home(props) {
         </div>
 
         {/* menu */}
-        <Sidebar login={login} />
+        <Sidebar setLogout={props.setLogout}/>
       </div>
       {/* colonne 2 main feed */}
       <div className="w-3/6 h-screen">

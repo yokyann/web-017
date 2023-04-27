@@ -1,11 +1,13 @@
 function Logout(props) {
   function logoutHandler() {
-    props.logout();
+    console.log("click on logouts")
+    localStorage.removeItem('token');
+    props.setLogout();
   } 
 
   return (
     <div>
-      <button onClick={logoutHandler} >logout</button>
+      <button className="text-white" onClick={logoutHandler} >logout</button>
     </div>
   );
 }
