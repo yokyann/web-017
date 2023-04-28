@@ -25,12 +25,6 @@ function Home(props) {
     fetchMessages();
   }, []);
 
-  function profilePage() {
-    props.setPage("profile_page");
-  }
-  function homePage() {
-    props.setPage("home_page");
-  }
 
   return (
     <div className="flex flex-col items-center md:flex-row ">
@@ -59,13 +53,14 @@ function Home(props) {
             Search
           </button>
         </div>
-        {/* create new meassges */}
+        <div className="m-4">
         {props.page === "home_page" ? (
           <Feed messages={messages} following={following}></Feed>
         ) : (
           props.page === "profile_page" ? (
-            <Profile></Profile> ) : (
+            <Profile user={props.user}></Profile> ) : (
               <div>404 page do not exist</div>))}
+        </div>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import ListAllMessages from "./ListAllMessages";
 function Feed(props){
     return(
         <div>
-          <div className="m-4">
+          <div className="">
             <label>Create new meassges</label>
             <br></br>
             <input className="border"></input>

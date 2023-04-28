@@ -29,6 +29,7 @@ class Messages {
 
     // Get a user's messages
     async getUserMessages(login) {
+        console.log("in function getUserMessages IN MESSAGES", login)
         const messages = await this.db.collection('Messages').find({ author_login: login }).toArray();
         return messages;
     }

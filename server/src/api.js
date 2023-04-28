@@ -2,7 +2,6 @@ const express = require('express');
 const app = express.Router();
 const Users = require("./entities/users");
 const Messages = require("./entities/messages");
-const Friends = require("./entities/friends");
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
@@ -12,7 +11,6 @@ const connectToDB = require("./database");
 const clientPromise = connectToDB();
 let users;
 let messages;
-let friends;
 let db;
 
 
@@ -20,11 +18,9 @@ clientPromise
   .then((client) => {
     users = new Users(client);
     messages = new Messages(client);
-    friends = new Friends(client);
     db = client.db('birdy');
     users.db = db;
     messages.db = db;
-    friends.db = db;
   })
   .catch((error) => {
     console.error("Error connecting to database: ", error);
@@ -111,7 +107,7 @@ app.post("/user/logout", async (req, res) => {
 
 app.get("/messages", async (req, res) => {
 
-  const result = await messages.getAllMessages()
+  await messages.getAllMessages()
   .then((result) => {
     if (result) {
       console.log("result", result)
@@ -140,7 +136,8 @@ app.delete("/user/delete", async (req, res) => {
 // get a user's all messages
 app.get("/messages/user", async (req, res) => {
   const { login } = req.query;
-  const result = await messages.getUserMessages(login)
+  console.log("I USER MESSAGES login", login)
+  await messages.getUserMessages(login)
   .then((result) => {
     if (result) {
       console.log("result", result)

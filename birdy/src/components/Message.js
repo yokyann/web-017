@@ -1,6 +1,6 @@
 function Message({ message }) {
   return (
-    <div className="m-2 p-2">
+    <div className="">
         <div>{message.author_login}</div>
         <div>{message.message}</div>
         <div>
