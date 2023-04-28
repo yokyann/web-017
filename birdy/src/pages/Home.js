@@ -1,7 +1,9 @@
 import ListAllMessages from "../components/ListAllMessages";
 import Sidebar from "../components/Sidebar";
 import { useState, useEffect } from "react";
+import Feed from "../components/Feed";
 import axios from "axios";
+import Profile from "../components/Profile";
 
 function Home(props) {
   console.log("props from Home : ", props);
@@ -9,27 +11,26 @@ function Home(props) {
   const [messages, setMessages] = useState([]);
   const [following, setFollowing] = useState(false);
 
+  async function fetchMessages() {
+    try {
+      const res = await axios.get("http://localhost:4000/api/messages");
+      console.log("axios.get('/messages') : ", res.data);
+      setMessages(res.data);
+    } catch (error) {
+      console.log("error : ", error);
+    }
+  }
 
-    async function fetchMessages() {
-      try {
-        const res = await axios.get("http://localhost:4000/api/messages");
-        console.log("axios.get('/messages') : ", res.data);
-        setMessages(res.data);
-      } catch (error) {
-        console.log("error : ", error);
-      }
-    }
+  useEffect(() => {
+    fetchMessages();
+  }, []);
 
-    useEffect(() => {
-      fetchMessages();
-    }, []);
-  
-    function profilePage(){
-      props.setPage("profile_page");
-    }
-    function homePage(){
-      props.setPage("home_page");
-    }
+  function profilePage() {
+    props.setPage("profile_page");
+  }
+  function homePage() {
+    props.setPage("home_page");
+  }
 
   return (
     <div className="flex flex-col items-center md:flex-row ">
@@ -41,7 +42,7 @@ function Home(props) {
         </div>
 
         {/* menu */}
-        <Sidebar setLogout={props.setLogout} page={props.page}/>
+        <Sidebar setLogout={props.setLogout} page={props.page} setPage={props.setPage} />
       </div>
       {/* colonne 2 main feed */}
       <div className="w-3/6 h-screen">
@@ -59,38 +60,12 @@ function Home(props) {
           </button>
         </div>
         {/* create new meassges */}
-        <div className="m-4">
-          <label>Create new meassges</label>
-          <br></br>
-          <input className="border"></input>
-        </div>
-
-        {/* list of all messages */}
-        <div className="ml-4">
-          {/* <ListMessages /> */}
-          <div>
-          <input
-            className="mr-2 mt-[0.3rem] h-3.5 w-8 appearance-none rounded-[0.4375rem] bg-neutral-300 before:pointer-events-none before:absolute before:h-3.5 before:w-3.5 before:rounded-full before:bg-transparent before:content-[''] after:absolute after:z-[2] after:-mt-[0.1875rem] after:h-5 after:w-5 after:rounded-full after:border-none after:bg-neutral-100 after:shadow-[0_0px_3px_0_rgb(0_0_0_/_7%),_0_2px_2px_0_rgb(0_0_0_/_4%)] after:transition-[background-color_0.2s,transform_0.2s] after:content-[''] checked:bg-primary checked:after:absolute checked:after:z-[2] checked:after:-mt-[3px] checked:after:ml-[1.0625rem] checked:after:h-5 checked:after:w-5 checked:after:rounded-full checked:after:border-none checked:after:bg-primary checked:after:shadow-[0_3px_1px_-2px_rgba(0,0,0,0.2),_0_2px_2px_0_rgba(0,0,0,0.14),_0_1px_5px_0_rgba(0,0,0,0.12)] checked:after:transition-[background-color_0.2s,transform_0.2s] checked:after:content-[''] hover:cursor-pointer focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[3px_-1px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-5 focus:after:w-5 focus:after:rounded-full focus:after:content-[''] checked:focus:border-primary checked:focus:bg-primary checked:focus:before:ml-[1.0625rem] checked:focus:before:scale-100 checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:bg-neutral-600 dark:after:bg-neutral-400 dark:checked:bg-primary dark:checked:after:bg-primary dark:focus:before:shadow-[3px_-1px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca]"
-            type="checkbox"
-            role="switch"
-            id="flexSwitchCheckDefault"
-          />
-          <label
-            className="inline-block pl-[0.15rem] hover:cursor-pointer"
-            for="flexSwitchCheckDefault"
-          >
-            Following Only                     
-
-          </label>
-          </div>
-          {following ? (
-            // List friends messages (not the correct way yet !)
-            <ListAllMessages messages={messages} />
-          ) : (
-            // List all messages
-            <ListAllMessages messages={messages} /> 
-          )}
-        </div>
+        {props.page === "home_page" ? (
+          <Feed messages={messages} following={following}></Feed>
+        ) : (
+          props.page === "profile_page" ? (
+            <Profile></Profile> ) : (
+              <div>404 page do not exist</div>))}
       </div>
     </div>
   );

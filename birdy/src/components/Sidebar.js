@@ -3,7 +3,6 @@ import Logout from "../components/Logout";
 import { useState } from "react";
 
 function Sidebar(props) {
-  const [activePage, setActivePage] = useState(props.page);
 
   function logoutHandler() {
     console.log("click on logouts")
@@ -11,7 +10,13 @@ function Sidebar(props) {
     props.setLogout();
   } 
 
+  function handleProfile() {
+    props.setPage("profile_page");
+  }
 
+  function handleHome() {
+    props.setPage("home_page");
+  }
 
   return (
     <div className="sidebar">
@@ -20,6 +25,7 @@ function Sidebar(props) {
           <li>
             <a
               href="#"
+              onClick={handleHome}
               className="flex items-center p-2 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900"
             >
               <span className="ml-3">Home</span>
@@ -28,6 +34,7 @@ function Sidebar(props) {
           <li>
             <a
               href="#"
+              onClick={handleProfile}
               className="flex items-center p-2 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900"
             >
               <span className="flex-1 ml-3">Profile</span>
@@ -48,7 +55,7 @@ function Sidebar(props) {
           <Friendslist />
         </div>
         <div className="">
-          <p className="text-white pt-10">Hi {props.login} in {activePage} or {props.page}</p>
+          <p className="text-white pt-10">Hi {props.login} or {props.page}</p>
         </div>
       </div>
     </div>

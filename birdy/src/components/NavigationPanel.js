@@ -66,7 +66,7 @@ console.log("connected",connected)
     <div>
       <nav id="navigation_pan">
         
-        {connected && page==="home_page" ? (
+        {connected ? (
           <Home user={user}                     
           setPage={setPage}
           page={page}
