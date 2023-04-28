@@ -7,7 +7,7 @@ function Logout(props) {
 
   return (
     <div>
-      <button className="text-white" onClick={logoutHandler} >logout</button>
+      <button className="text-white " onClick={logoutHandler} >logout</button>
     </div>
   );
 }

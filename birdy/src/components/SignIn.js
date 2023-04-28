@@ -62,25 +62,14 @@ function Signin(props) {
               password,
             })
             .then((res) => {
-              // console.log("axios.post('/user/new') : ", res);
-              // const token = res.data;
-              // setPassOK(true);
-              // localStorage.setItem("token", token);
-              // console.log("HERE BABY")
-              // console.log(localStorage.getItem("token"));
-              // const myuser = props.getUserfromToken(token);
-              // if (myuser) {
-              //   props.setUser(myuser);
-              //   props.getConnected();
-              // }
               if (res.data){
                 setPassOK(true);
                 const token = res.data;
                 localStorage.setItem("token", token);
                 const myuser = props.getUserfromToken(token);
                 if (myuser) {
-                  props.setUser(myuser);
                   props.getConnected();
+                  props.setUser(myuser);
                 }
               }
             });

@@ -26,8 +26,8 @@ function Login(props) {
   
         const myuser = props.getUserfromToken(token);
         if (myuser) {
-          props.setUser(myuser);
           props.getConnected();
+          props.setUser(myuser);
         }
       } else {
         setErrorMessage("Invalid login or password.");

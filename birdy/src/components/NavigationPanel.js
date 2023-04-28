@@ -11,6 +11,7 @@ function NavigationPanel(props) {
   const [connected, setConnected] = useState(false);
   const [user, setUser] = useState({});
 
+
   function getUserfromToken(token) {
     try {
       const decodedToken = jwt_decode(token);
@@ -32,7 +33,7 @@ function NavigationPanel(props) {
   
       if (myuser) {
         setUser(myuser);
-        setConnected(true);
+        getConnected();
       } 
     } else {
       setConnected(false);
@@ -59,12 +60,17 @@ function NavigationPanel(props) {
   const handleLogin = () => {
     setPage("login_page");
   };
+
 console.log("connected",connected)
   return (
     <div>
       <nav id="navigation_pan">
-        {connected && page === "home_page" ? (
-          <Home user={user} setLogout={setLogout} />
+        
+        {connected && page==="home_page" ? (
+          <Home user={user}                     
+          setPage={setPage}
+          page={page}
+          setLogout={setLogout} />
         ) : (
           // center the page
           <div className="flex justify-center items-center w-full p-16 bg-gray-100 xl:px-20 h-screen">
@@ -86,21 +92,21 @@ console.log("connected",connected)
                 {/* colonne 2 */}
                 <div className="w-full mt-16 md:mt-0 md:w-2/5">
                   <div className="h-auto p-8 py-10 overflow-hidden bg-white border-b-2 border-gray-300 shadow-2xl rounded-lg">
-                    {page === "signup_page" ? (
-                      // Render SignUp component here
-                      <div>SignUp component</div>
-                    ) : page === "signin_page" ? (
+                    {page === "signin_page" ? (
                       <Signin handleLogin={handleLogin} 
                         getUserfromToken={getUserfromToken}
                         setUser={setUser}
                         getConnected={getConnected}/>
                     ) : (
+                      page === "login_page" ?(
                       <Login
                         handleSignIn={handleSignIn}
                         getUserfromToken={getUserfromToken}
                         setUser={setUser}
                         getConnected={getConnected}
+                        setPage={setPage}
                       />
+                      ) : (<div></div>)
                     )}
                   </div>
                 </div>

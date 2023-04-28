@@ -9,6 +9,7 @@ function Home(props) {
   const [messages, setMessages] = useState([]);
   const [following, setFollowing] = useState(false);
 
+
     async function fetchMessages() {
       try {
         const res = await axios.get("http://localhost:4000/api/messages");
@@ -22,7 +23,13 @@ function Home(props) {
     useEffect(() => {
       fetchMessages();
     }, []);
-
+  
+    function profilePage(){
+      props.setPage("profile_page");
+    }
+    function homePage(){
+      props.setPage("home_page");
+    }
 
   return (
     <div className="flex flex-col items-center md:flex-row ">
@@ -30,11 +37,11 @@ function Home(props) {
       <div className="w-2/6 h-screen  bg-gray-800">
         <div className="flex items-center ">
           <img className="ml-4 w-12" src="birdy.png"></img>
-          <h1 className="ml-4 text-white">Birdy</h1>
+          <h1 className="ml-4 text-white">Birdy {props.page}</h1>
         </div>
 
         {/* menu */}
-        <Sidebar setLogout={props.setLogout}/>
+        <Sidebar setLogout={props.setLogout} page={props.page}/>
       </div>
       {/* colonne 2 main feed */}
       <div className="w-3/6 h-screen">
@@ -72,7 +79,8 @@ function Home(props) {
             className="inline-block pl-[0.15rem] hover:cursor-pointer"
             for="flexSwitchCheckDefault"
           >
-            Following Only
+            Following Only                     
+
           </label>
           </div>
           {following ? (
