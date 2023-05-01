@@ -5,7 +5,11 @@ function Message({ message }) {
         <div>{message.message}</div>
         <div>
             <div>Likes : {message.liked_by}</div>
-            <div>Comments : </div>
+            <div>Comments :
+              <ul>
+                {message.comments.map((m) => <li>{m}</li>)}
+              </ul>
+            </div>
         </div>
 
     </div>

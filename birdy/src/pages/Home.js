@@ -10,6 +10,7 @@ function Home(props) {
   const login = props.user.login;
   const [messages, setMessages] = useState([]);
   const [following, setFollowing] = useState(false);
+  const [filteredMsg, setfilteredMsg] = useState(messages); 
 
   async function fetchMessages() {
     try {
@@ -19,6 +20,16 @@ function Home(props) {
     } catch (error) {
       console.log("error : ", error);
     }
+  }
+
+  function getInputValue(){
+    let inputVal = document.getElementById("filt").value.toLowerCase()
+    var res = []
+    messages.forEach(msg =>{
+      if (msg.author_login.toLowerCase().includes(inputVal) || msg.message.toLowerCase().includes(inputVal))
+        res.push(msg)
+    })
+    setfilteredMsg(res)
   }
 
   useEffect(() => {
@@ -44,18 +55,20 @@ function Home(props) {
           <input
             type="search"
             className="block w-full m-4 p-2 pl-10 border border-gray-300 rounded-lg bg-gray-50 "
+            id = "filt"
             placeholder="Search here"
           ></input>
           <button
             type="submit"
             className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
+            onClick={getInputValue}
           >
             Search
           </button>
         </div>
         <div className="m-4">
         {props.page === "home_page" ? (
-          <Feed messages={messages} following={following}></Feed>
+          <Feed messages={filteredMsg} following={following}></Feed>
         ) : (
           props.page === "profile_page" ? (
             <Profile user={props.user}></Profile> ) : (
