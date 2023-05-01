@@ -9,7 +9,6 @@ function Home(props) {
   console.log("props from Home : ", props);
   const login = props.user.login;
   const [messages, setMessages] = useState([]);
-  const [following, setFollowing] = useState(false);
   const [filteredMsg, setfilteredMsg] = useState(messages); 
 
   async function fetchMessages() {
@@ -34,6 +33,7 @@ function Home(props) {
 
   useEffect(() => {
     fetchMessages();
+    getInputValue()
   }, []);
 
 
@@ -68,7 +68,7 @@ function Home(props) {
         </div>
         <div className="m-4">
         {props.page === "home_page" ? (
-          <Feed messages={filteredMsg} following={following}></Feed>
+          <Feed messages={filteredMsg} user ={props.user}></Feed>
         ) : (
           props.page === "profile_page" ? (
             <Profile user={props.user}></Profile> ) : (
