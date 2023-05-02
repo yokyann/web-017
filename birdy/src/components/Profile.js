@@ -27,19 +27,23 @@ function Profile(props) {
     }, []);
 
     return (
-        <div>
+        <div className="flex flex-col md:flex-column ">
             <div>
-                <h1 className="text-2xl m-4">Hi {login}</h1>
+                <h1 className=" text-2xl m-4">Hi {login}</h1>
             </div>
+            <br></br>
             {/* Lise des personnes suivies */}
-            <div className="m-2">
-                <h1>Followings :</h1>
-                <ListFollowings followings={followings} />
-            </div>
-            {/* Liste des personnes qui nous suivent */}
-            <div className="m-2">
-                <h1>Followers :</h1>
-                <ListFollowings followings={followers} />
+            <div className="flex flex-col  md:flex-row">
+                <div className="rounded-xl   p-5 relative container mx-auto w-1/2 flex-col m-2 mr-2 bg-sky-100">
+                    <h1 className="font-bold border-b-2 border-black">Followings :</h1>
+                    <ListFollowings followings={followings} />
+                </div>
+                
+                {/* Liste des personnes qui nous suivent */}
+                <div className="rounded-xl relative p-5 container mx-auto w-1/2 flex-col m-2  bg-sky-100">
+                    <h1 className="font-bold border-b-2 border-black">Followers :</h1>
+                    <ListFollowings followings={followers} />
+                </div>
             </div>
             {/* Liste des messages écrits */}
             <div className="m-2">

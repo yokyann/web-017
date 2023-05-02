@@ -38,19 +38,18 @@ function Home(props) {
 
 
   return (
-    <div className="flex flex-col items-center md:flex-row ">
+    <div className="flex flex-col md:flex-row">
       {/* colonne 1 side bar */}
-      <div className="w-2/6 h-screen  bg-gray-800">
+      <div className="w-2/6 flex-col  bg-gray-800">
         <div className="flex items-center ">
           <img className="ml-4 w-12" src="birdy.png"></img>
           <h1 className="ml-4 text-white">Birdy {props.page}</h1>
         </div>
-
         {/* menu */}
         <Sidebar setLogout={props.setLogout} page={props.page} setPage={props.setPage} />
       </div>
       {/* colonne 2 main feed */}
-      <div className="w-3/6 h-screen">
+      <div className="w-3/6 ">
         <div>
           <input
             type="search"
@@ -58,13 +57,7 @@ function Home(props) {
             id = "filt"
             placeholder="Search here"
           ></input>
-          <button
-            type="submit"
-            className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
-            onClick={getInputValue}
-          >
-            Search
-          </button>
+          
         </div>
         <div className="m-4">
         {props.page === "home_page" ? (
@@ -75,7 +68,16 @@ function Home(props) {
               <div>404 page do not exist</div>))}
         </div>
       </div>
+      <div className="w-1/6">
+        <button
+            type="submit"
+            className="m-4 p-3 ml-6 mt-5  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
+            onClick={getInputValue}
+          >
+            Search
+        </button></div>
     </div>
+
   );
 }
 

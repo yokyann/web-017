@@ -57,8 +57,13 @@ function Feed(props){
       <div className="">
         <label>Create new message</label>
         <br></br>
-        <input onChange={handleChange} onKeyDown={handleCreateMessage} type="text" className="border"></input>
-        <button className="border p-2" onClick={handleButtonClick}>Create new message</button>
+        <input  
+        clonChange={handleChange} 
+        onKeyDown={handleCreateMessage} 
+        type="text" 
+        className="  border rounded-lg"></input>
+
+        <button className="border p-2 ml-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2" onClick={handleButtonClick}>Create new message</button>
       </div>
 
       {/* list of all messages */}
