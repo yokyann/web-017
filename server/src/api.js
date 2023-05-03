@@ -103,6 +103,27 @@ app.post("/user/logout", async (req, res) => {
 });
 
 
+
+// create new message
+app.post("/messages/new", async (req, res) => {
+  const { newMessage, log } = req.body;
+  console.log(req.body)
+  console.log("api",newMessage,log)
+  try {
+    await messages.create(newMessage, log)
+      .then((result) => {
+        if (result) {
+          res.send(result)
+        }
+      })
+  }
+  catch (e) {
+    res.send(e.message)
+  }
+})
+
+
+
 // get all messages
 
 app.get("/messages", async (req, res) => {

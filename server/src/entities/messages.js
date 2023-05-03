@@ -5,20 +5,19 @@ class Messages {
         this.db = db;
     }
 
+
     // Create a new message
-    async create(message, comments, author_login, liked_by) {
-        console.log("in function create", message, comments, author_login, liked_by)
-      
+    async create(message, author_login) {
+        console.log("trudfbndvjsk",message,author_login)
         const result = await this.db.collection('Messages').insertOne({
           message,
-          comments,
+          comments : [],
           author_login,
-          liked_by,
+          liked_by : [],
           date_creation: new Date()
         });
         return result;
       }
-      
 
 
     // Get all messages

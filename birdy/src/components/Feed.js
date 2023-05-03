@@ -10,7 +10,7 @@ function Feed(props){
   const setFollowing = props.setFollowing;
   const followmsg = props.followmsg;
   const setFollowmsg = props.setFollowmsg;
-
+  const log = props.user.login
 
 
   function onlyfollowers(){
@@ -37,33 +37,38 @@ function Feed(props){
 
   function handleCreateMessage(event) {
     if (event.key === "Enter") {
-      setNewMessage(event.target.value)
-      console.log(event.target.value)
-      console.log("IN ENTER OMOODE")
-      console.log(newMessage)
+      createMessage()
     }
 
   }
   function handleButtonClick() {
-    console.log("IN ONCLICK OMOODE");
-    console.log(newMessage);
+    createMessage()
   }
   function handleChange(event) {
+    console.log(event.target.value)
     setNewMessage(event.target.value)
+    
   }
 
-  function createMessage() {
-    console.log("IN CREATE MESSAGE ACTUAL AXIOS")
-    console.log(newMessage)
-  }
+
   
+  async function createMessage(e) {
+    await axios
+      .post("http://localhost:4000/api/messages/new",{
+        newMessage,
+        log
+      })
+    console.log("testtttttttttttttherfdjkghdsfjklghjk",newMessage)
+    console.log(log)
+  }
+
   return (
     <div>
       <div className="">
         <label>Create new message</label>
         <br></br>
         <input  
-        clonChange={handleChange} 
+        onChange={handleChange} 
         onKeyDown={handleCreateMessage} 
         type="text" 
         className="  border rounded-lg"></input>
@@ -90,10 +95,10 @@ function Feed(props){
           </label>
         </div>
         {following ? (
-          <ListAllMessages messages={followmsg} />
+          <ListAllMessages messages={followmsg} info = {props}/>
         ) : (
           // List all messages
-          <ListAllMessages messages={props.messages} />
+          <ListAllMessages messages={props.messages} info = {props} />
         )}
       </div>
     </div>
