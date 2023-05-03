@@ -10,32 +10,48 @@ function Home(props) {
   const login = props.user.login;
   const [messages, setMessages] = useState([]);
   const [filteredMsg, setfilteredMsg] = useState(messages); 
+  const [followmsg,setFollowmsg] = useState(props.messages);
+  const [following, setFollowing] = useState(false);
 
   async function fetchMessages() {
     try {
       const res = await axios.get("http://localhost:4000/api/messages");
       console.log("axios.get('/messages') : ", res.data);
       setMessages(res.data);
+      setfilteredMsg(res.data);
     } catch (error) {
       console.log("error : ", error);
     }
   }
+  
+  // ff jarrive pas c pg pour linstatn
 
-  function getInputValue(){
-    let inputVal = document.getElementById("filt").value.toLowerCase()
-    var res = []
-    messages.forEach(msg =>{
-      if (msg.author_login.toLowerCase().includes(inputVal) || msg.message.toLowerCase().includes(inputVal))
-        res.push(msg)
-    })
-    setfilteredMsg(res)
+  function getInputValue() {
+    const inputVal = document.getElementById("filt").value.toLowerCase();
+    const res = [];
+    const messagesToFilter = following ? followmsg : messages;
+  
+    messagesToFilter.forEach((msg) => {
+      if (
+        msg.author_login.toLowerCase().includes(inputVal) ||
+        msg.message.toLowerCase().includes(inputVal)
+      ) {
+        res.push(msg);
+      }
+    });
+  
+    setfilteredMsg(res);
   }
+
+  
 
   useEffect(() => {
     fetchMessages();
-    getInputValue()
   }, []);
 
+  if (messages === null) {
+    return <div>Loading messages...</div>;
+  }
 
   return (
     <div className="flex flex-col md:flex-row">
@@ -46,7 +62,7 @@ function Home(props) {
           <h1 className="ml-4 text-white">Birdy {props.page}</h1>
         </div>
         {/* menu */}
-        <Sidebar setLogout={props.setLogout} page={props.page} setPage={props.setPage} />
+        <Sidebar user={props.user} setLogout={props.setLogout} page={props.page} setPage={props.setPage} />
       </div>
       {/* colonne 2 main feed */}
       <div className="w-3/6 ">
@@ -61,7 +77,15 @@ function Home(props) {
         </div>
         <div className="m-4">
         {props.page === "home_page" ? (
-          <Feed messages={filteredMsg} user ={props.user}></Feed>
+          <Feed 
+          messages={filteredMsg} 
+          user={props.user} 
+          followmsg={followmsg} 
+          setFollowmsg={setFollowmsg} 
+          following={following} 
+          setFollowing={setFollowing}
+        />
+        
         ) : (
           props.page === "profile_page" ? (
             <Profile user={props.user}></Profile> ) : (

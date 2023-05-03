@@ -6,17 +6,22 @@ import axios from "axios";
 function Feed(props){
   const [newMessage, setNewMessage] = useState("")
   const followings = props.user.followings;
-  const [followmsg,setFollowmsg] = useState(props.messages);
-  const [following, setFollowing] = useState(false);
+  const following = props.following;
+  const setFollowing = props.setFollowing;
+  const followmsg = props.followmsg;
+  const setFollowmsg = props.setFollowmsg;
+
+
 
   function onlyfollowers(){
     var res = []
     props.messages.forEach(msg =>{
-      if (followings.includes(msg.author_login.toLowerCase()))
+      if (msg.author_login && followings.includes(msg.author_login.toLowerCase()))
         res.push(msg)
     })
     setFollowmsg(res)
   }
+  
   function switchFollow(){
     if (following){
       setFollowing(false)
@@ -85,7 +90,6 @@ function Feed(props){
           </label>
         </div>
         {following ? (
-          // List friends messages (not the correct way yet !)
           <ListAllMessages messages={followmsg} />
         ) : (
           // List all messages

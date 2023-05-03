@@ -51,11 +51,11 @@ function Sidebar(props) {
           </li>
         </ul>
         {/* contient liste des amis */}
-        <div className="mt-4">
-          <Friendslist />
+        <div className="mt-4 ml-4">
+          <Friendslist friends={props.user.followings} />
         </div>
         <div className="">
-          <p className="text-white pt-10">Hi {props.login} or {props.page}</p>
+          <p className="text-white pt-10">Hi {props.user.login} or {props.page}</p>
         </div>
       </div>
     </div>
