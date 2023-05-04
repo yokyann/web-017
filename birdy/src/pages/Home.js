@@ -84,11 +84,13 @@ function Home(props) {
           setFollowmsg={setFollowmsg} 
           following={following} 
           setFollowing={setFollowing}
+          page = {props.page}
+          setMessages={setfilteredMsg}
         />
         
         ) : (
           props.page === "profile_page" ? (
-            <Profile user={props.user}></Profile> ) : (
+            <Profile user={props.user} page={props.page}></Profile> ) : (
               <div>404 page do not exist</div>))}
         </div>
       </div>

@@ -11,7 +11,8 @@ function Feed(props){
   const followmsg = props.followmsg;
   const setFollowmsg = props.setFollowmsg;
   const log = props.user.login
-
+  const messages = props.messages
+  const setMessages = props.setMessages
 
   function onlyfollowers(){
     var res = []
@@ -58,6 +59,10 @@ function Feed(props){
         newMessage,
         log
       })
+      .then((res) => {
+        console.log("res.data", res.data);
+        setNewMessage("");
+      })
     console.log("testtttttttttttttherfdjkghdsfjklghjk",newMessage)
     console.log(log)
   }
@@ -95,10 +100,10 @@ function Feed(props){
           </label>
         </div>
         {following ? (
-          <ListAllMessages messages={followmsg} info = {props}/>
+          <ListAllMessages messages={followmsg} info = {props} page={props.page} setMessages={setMessages}/>
         ) : (
           // List all messages
-          <ListAllMessages messages={props.messages} info = {props} />
+          <ListAllMessages messages={props.messages} user = {props.user} page={props.page}/>
         )}
       </div>
     </div>

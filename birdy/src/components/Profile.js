@@ -50,7 +50,7 @@ function Profile(props) {
             </div>
             {/* Liste des messages écrits */}
             <div className="m-2">
-                <ListAllMessages messages={myMessages} />
+                <ListAllMessages messages={myMessages} page={props.page}/>
             </div>
         </div>
     );

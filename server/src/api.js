@@ -117,10 +117,11 @@ app.post("/messages/new", async (req, res) => {
         }
       })
   }
-  catch (e) {
+  catch (e) { // Change error to e here
     res.send(e.message)
   }
 })
+
 
 
 
@@ -171,7 +172,22 @@ app.get("/messages/user", async (req, res) => {
 
 
 // addlike
-// app.patch("/messages/addlike", async (req, res) => {
+app.patch("/message/like", async (req, res) => {
+  console.log("HELPOPLEASE")
+  const { id, login } = req.body;
+  console.log("I ADD LIKE id", id)
+  console.log("I ADD LIKE login", login)
+  await messages.addLike(login, id)
+  .then((result) => {
+    if (result) {
+      console.log("result", result)
+      res.send(result)
+    } else {
+      res.send('erreur lors de addLike')
+    }
+  })
+});
+
 
 // update user login
 // app.patch("/user/update/login", async (req, res) => {
@@ -181,7 +197,20 @@ app.get("/messages/user", async (req, res) => {
 
 
 // delete user message
-// app.delete("/user/message/delete", async (req, res) => {
+app.delete("/message/delete", async (req, res) => {
+  console.log("I DELETE MESSAGE entering")
+  const { id } = req.body;
+  console.log("I DELETE MESSAGE id", id)
+  await messages.deleteMessage(id)
+  .then((result) => {
+    if (result) {
+      console.log("result", result)
+      res.send(result)
+    } else {
+      res.send('erreur lors de deleteMessage')
+    }
+  })
+});
 
 // update user message
 // app.update("/user/message/update", async (req, res) => {
@@ -190,7 +219,20 @@ app.get("/messages/user", async (req, res) => {
 // app.update("/messages/addcomment", async (req, res) => {
 
 // delete a like
-// app.delete("/messages/deletelike", async (req, res) => {
+app.patch("/message/unlike", async (req, res) => {
+  const { id, login } = req.body;
+  console.log("I DELETE LIKE id", id)
+  console.log("I DELETE LIKE login", login)
+  await messages.deleteLike( login, id)
+  .then((result) => {
+    if (result) {
+      console.log("result", result)
+      res.send(result)
+    } else {
+      res.send('erreur lors de deleteLike')
+    }
+  })
+});
 
 // delete a comment
 // app.delete("/messages/deletecomment", async (req, res) => {
