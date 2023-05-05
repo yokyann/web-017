@@ -28,11 +28,10 @@ function Profile(props) {
 
     return (
         <div className="flex flex-col md:flex-column ">
-            <div className="relative container">
-                <h1 className=" text-2xl m-4">Hi {login}</h1>
-                <div className="flex absolute top-5 right-4">
-                    <button>Delete user ???</button>
-                </div>
+            <div className="flex ">
+                <img className="w-1/5" src="technology.png"></img>
+                <h1 className=" w-3/5 text-2xl"> {login}</h1>
+                <button className="w-1/5">Delete user ???</button>
             </div>
             <br></br>
             {/* Lise des personnes suivies */}

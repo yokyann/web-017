@@ -58,8 +58,34 @@ class Users {
     }
   }
 
+// Get all users
+  async getAllUsers() {
+    const result = await this.db.collection("Users").find().toArray();
+    return result;
+  }
 
-    
+  // Follow a user
+  async followUser(login, loginToFollow) {
+    console.log("in function followUser", login, loginToFollow);
+    await this.db.collection("Users").updateOne(
+      { login },
+      { $addToSet: { followings: loginToFollow } }
+    );
+    const thisuser = await this.db.collection("Users").findOne({ login });
+    return thisuser;
+  }
+
+  // Unfollow a user
+  async unfollowUser(login, loginToUnfollow) {
+    console.log("in function unfollowUser", login, loginToUnfollow);
+    await this.db.collection("Users").updateOne(
+      { login },
+      { $pull: { followings: loginToUnfollow } }
+    );
+    const thisuser = await this.db.collection("Users").findOne({ login });
+    return thisuser;
+  }
+
   // update a user login
   // async updateOne(login, new_login) {
 

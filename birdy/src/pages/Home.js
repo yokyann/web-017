@@ -10,8 +10,9 @@ function Home(props) {
   const login = props.user.login;
   const [messages, setMessages] = useState([]);
   const [filteredMsg, setfilteredMsg] = useState(messages);
-  const [followmsg, setFollowmsg] = useState(props.messages);
+  const [followmsg, setFollowmsg] = useState([]);
   const [following, setFollowing] = useState(false);
+  const [userOnly, setUserOnly] = useState(false);
 
   async function fetchMessages() {
     try {
@@ -30,6 +31,9 @@ function Home(props) {
     const res = [];
     const messagesToFilter = following ? followmsg : messages;
 
+    console.log("inputVal", following);
+    console.log("messagesToFilter ARE YOU FILTERED", messagesToFilter);
+
     messagesToFilter.forEach((msg) => {
       if (
         msg.author_login.toLowerCase().includes(inputVal) ||
@@ -38,7 +42,7 @@ function Home(props) {
         res.push(msg);
       }
     });
-
+    console.log("res FILTERED ", res)
     setfilteredMsg(res);
   }
 
@@ -49,6 +53,16 @@ function Home(props) {
 
   if (messages === null) {
     return <div>Loading messages...</div>;
+  }
+
+  function handleEnter(event) {
+    if (event.key === "Enter") {
+      getInputValue()
+    }
+
+  }
+  function handleButtonClick() {
+    getInputValue()
   }
 
   return (
@@ -69,23 +83,27 @@ function Home(props) {
       </div>
       {/* colonne 2 main feed */}
       <div className="w-5/6 p-4">
-        <div className="flex">
+        <div className="flex ml-6">
           <input
             type="search"
             className="block w-full m-4 p-2 pl-10 border border-gray-300 rounded-lg bg-gray-50 "
             id="filt"
             placeholder="Search here"
+            onKeyDown={handleEnter}
           ></input>
           <div className="w-1/6">
             <button
               type="submit"
               className="m-4 p-3 ml-6 mt-5  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
-              onClick={getInputValue}
+              onClick={handleButtonClick}
             >
               Search
             </button>
           </div>
+          
+    
         </div>
+        
         <div className="mx-10 my-4 center ">
           {props.page === "home_page" ? (
             <Feed
@@ -97,6 +115,8 @@ function Home(props) {
               setFollowing={setFollowing}
               page={props.page}
               setMessages={setfilteredMsg}
+              userOnly={userOnly}
+              setUserOnly={setUserOnly}
             />
           ) : props.page === "profile_page" ? (
             <Profile user={props.user} page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>

@@ -88,6 +88,15 @@ app.post('/user/login', async (req, res) => {
   }
 });
 
+// get all users
+app.get("/users/all", async (req, res) => {
+  await users.getAllUsers()
+  .then((result) => {
+    if (result) {
+      res.send(result)
+    }
+  })
+})
 
 
 // Logout current user
@@ -122,7 +131,37 @@ app.post("/messages/new", async (req, res) => {
   }
 })
 
+// follow an user
+app.patch("/user/follow", async (req, res) => {
+  const { login, loginToFollow } = req.body;
+  console.log("I FOLLOW login", login)
+  console.log("I FOLLOW loginToFollow", loginToFollow)
+  await users.followUser(login, loginToFollow)
+  .then((result) => {
+    if (result) {
+      console.log("result", result)
+      res.send(result)
+    } else {
+      res.send('erreur lors de follow')
+    }
+  })
+});
 
+// unfollow an user
+app.patch("/user/unfollow", async (req, res) => {
+  const { login, loginToUnfollow } = req.body;
+  console.log("I UNFOLLOW login", login)
+  console.log("I UNFOLLOW loginToUnfollow", loginToUnfollow)
+  await users.unfollowUser(login, loginToUnfollow)
+  .then((result) => {
+    if (result) {
+      console.log("result", result)
+      res.send(result)
+    } else {
+      res.send('erreur lors de unfollow')
+    }
+  })
+});
 
 
 // get all messages

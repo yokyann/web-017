@@ -1,5 +1,4 @@
 import Friendslist from "../components/FriendsList";
-import Logout from "../components/Logout";
 import { useState } from "react";
 
 function Sidebar(props) {
