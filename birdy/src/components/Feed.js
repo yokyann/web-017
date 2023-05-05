@@ -86,15 +86,15 @@ function Feed(props) {
       <div>
               <ul class="text-center divide-x divide-gray-800 rounded-lg flex " >
                 <li class="w-full">
-                  <button onClick={handleSeeMessages}  className=" w-full p-4 rounded-tl-lg bg-gray-200 hover:bg-gray-100 focus:outline-none">Messages</button>
+                  <button onClick={handleSeeMessages}  className=" w-full p-4 rounded-tl-lg bg-gray-200 hover:bg-gray-300 focus:outline-none">Messages</button>
                 </li>
                 <li class="w-full">
-                  <button onClick={handleSeeUsers} className=" w-full p-4 rounded-tr-lg bg-gray-200 hover:bg-gray-100 focus:outline-none" >Users</button>
+                  <button onClick={handleSeeUsers} className=" w-full p-4 rounded-tr-lg bg-gray-200 hover:bg-gray-300 focus:outline-none" >Users</button>
                 </li>
 
               </ul>
             </div>
-      {props.userOnly ? (<ListUsers me={props.user} users={users} setUsers={setUsers} />) : (
+      {props.userOnly ? (<ListUsers setPage={props.setPage} setVisitMe={props.setVisitMe} me={props.user} users={users} setUsers={setUsers} />) : (
         <div>
           <div className="my-2">
             <label>Create new message</label>
@@ -115,10 +115,10 @@ function Feed(props) {
             <div>
               <ul class="text-center divide-x divide-gray-800 rounded-lg flex " >
                 <li class="w-full">
-                  <button onClick={handleAll}  className=" w-full p-4 rounded-tl-lg bg-gray-200 hover:bg-gray-100 focus:outline-none">All</button>
+                  <button onClick={handleAll}  className=" w-full p-4 rounded-tl-lg bg-gray-200 hover:bg-gray-300 focus:outline-none">All</button>
                 </li>
                 <li class="w-full">
-                  <button onClick={handleFollowing} className=" w-full p-4 rounded-tr-lg bg-gray-200 hover:bg-gray-100 focus:outline-none" >Followings</button>
+                  <button onClick={handleFollowing} className=" w-full p-4 rounded-tr-lg bg-gray-200 hover:bg-gray-300 focus:outline-none" >Followings</button>
                 </li>
 
               </ul>

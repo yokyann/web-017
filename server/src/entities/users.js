@@ -53,8 +53,26 @@ class Users {
     console.log("in function deleteUser", login);
     const exists = await this.db.collection("Users").findOne({ login });
     if (exists) {
-      const result = await this.db.collection("Users").deleteOne({ login });
-      return result;
+      await this.db.collection("Users").deleteOne({ login });
+      const allUsers = await this.db.collection("Users").find().toArray();
+      for (let i = 0; i < allUsers.length; i++) {
+        await this.db.collection("Users").updateOne(
+          { login: allUsers[i].login },
+          { $pull: { blocked_users: login } }
+
+
+        );
+        await this.db.collection("Users").updateOne(
+          { login: allUsers[i].login },
+          { $pull: { followers: login } }
+        );
+        await this.db.collection("Users").updateOne(
+          { login: allUsers[i].login },
+          { $pull: { followings: login } }
+        );
+
+      }
+      return allUsers;
     }
   }
 
@@ -64,12 +82,23 @@ class Users {
     return result;
   }
 
+  // get user info by login
+  async getUser(login) {
+    console.log("in function getUserInfo", login);
+    const result = this.db.collection("Users").findOne({ login });
+    return result;
+  } 
+
   // Follow a user
   async followUser(login, loginToFollow) {
     console.log("in function followUser", login, loginToFollow);
     await this.db.collection("Users").updateOne(
       { login },
       { $addToSet: { followings: loginToFollow } }
+    );
+    await this.db.collection("Users").updateOne(
+      { login: loginToFollow },
+      { $addToSet: { followers: login } }
     );
     const thisuser = await this.db.collection("Users").findOne({ login });
     return thisuser;
@@ -82,6 +111,11 @@ class Users {
       { login },
       { $pull: { followings: loginToUnfollow } }
     );
+    await this.db.collection("Users").updateOne(
+      { login: loginToUnfollow },
+      { $pull: { followers: login } }
+    );
+
     const thisuser = await this.db.collection("Users").findOne({ login });
     return thisuser;
   }

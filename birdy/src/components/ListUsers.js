@@ -23,7 +23,7 @@ function ListUsers(props){
                 {props.users.map((user) => {
                     return (
                         <div>
-                            <User setUsers={props.setUsers} me={props.me} user={user}/>
+                            <User setPage={props.setPage} setVisitMe={props.setVisitMe} setUsers={props.setUsers} me={props.me} user={user}/>
                         </div>
                     )
                 }

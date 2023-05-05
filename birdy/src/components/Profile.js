@@ -26,12 +26,32 @@ function Profile(props) {
         fetchMyMessages();
     }, []);
 
+    function deleteUser(e){
+        e.preventDefault();
+        if (window.confirm("Are you sure you want to delete your account?")) {
+            console.log("oui", login);
+            axios.delete("http://localhost:4000/api/user/delete", {
+                data: { login }
+            })
+            .then((res) => {
+                console.log("res", res.data);
+                props.setLogout()
+            })
+            .catch((err) => {
+                console.log("err", err);
+            });
+        }
+    
+    }
+
     return (
         <div className="flex flex-col md:flex-column ">
-            <div className="flex ">
-                <img className="w-1/5" src="technology.png"></img>
-                <h1 className=" w-3/5 text-2xl"> {login}</h1>
-                <button className="w-1/5">Delete user ???</button>
+            <div className="flex  ">
+                <img className=" object-contain h-20" src="technology.png"></img>
+                <button className="ml-8 text-6xl w-4/5 text-left">{login}</button>
+                {props.page === "profile_page" ? (
+                    <div className="w-1/5 items-center justify-center flex"><button onClick={deleteUser} className="p-2 border rounded-l">Delete user ???</button></div>):(null)}
+                
             </div>
             <br></br>
             {/* Lise des personnes suivies */}

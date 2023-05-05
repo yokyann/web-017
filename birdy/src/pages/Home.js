@@ -13,6 +13,7 @@ function Home(props) {
   const [followmsg, setFollowmsg] = useState([]);
   const [following, setFollowing] = useState(false);
   const [userOnly, setUserOnly] = useState(false);
+  const [visitMe, setVisitMe] = useState({});
 
   async function fetchMessages() {
     try {
@@ -117,11 +118,16 @@ function Home(props) {
               setMessages={setfilteredMsg}
               userOnly={userOnly}
               setUserOnly={setUserOnly}
+              setPage={props.setPage}
+              setVisitMe={setVisitMe}
             />
           ) : props.page === "profile_page" ? (
-            <Profile user={props.user} page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>
+            <Profile setLogout={props.setLogout} user={props.user}   page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>
           ) : (
-            <div>404 page do not exist</div>
+              props.page === "visiting" ? (
+                <Profile setLogout={props.setLogout} user={visitMe} page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>
+              ):(null)         
+
           )}
         </div>
       </div>

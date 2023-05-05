@@ -9,6 +9,17 @@ function User(props) {
   const commonFollowers = user.followers.filter(
     (follower) => follower !== me.login && myfollowings.includes(follower)
   );
+  useEffect(() => {
+    axios.get(`http://localhost:4000/api/user/${me.login}`)
+      .then((res) => {
+        setMyfollowings(res.data.followings);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }, []);
+  
+  console.log("THE FOLLOWINGS OF EM", myfollowings)
 
   function handleFollow(e) {
     console.log("clicek");
@@ -20,7 +31,7 @@ function User(props) {
         loginToFollow : user.login,
         })
         .then((res) => {
-            console.log("res in follow", res.data);
+            console.log("res in follow", res.data.followings);
             setMyfollowings(res.data.followings);
             
             })
@@ -47,13 +58,17 @@ function User(props) {
     }
   }
 
+  function visitPage(e) {
+    console.log("visitPage");
+    props.setVisitMe(user);
+    props.setPage("visiting");
+  }
+
   if (user.login !== me.login) {
     return (
-      <div className="flex container mx-auto bg-gray-200 rounded-xl shadow border p-4 m-4">
+      <div className="hover:bg-gray-300 flex container mx-auto bg-gray-200 rounded-xl shadow border p-4 m-4">
         <div
-          onClick={() => {
-            console.log("clicked");
-          }}
+          onClick={visitPage}
         >
           <h1 className="text-xl">{user.login}</h1>
           {commonFollowers.length > 0 ? (

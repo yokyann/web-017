@@ -51,7 +51,9 @@ function Sidebar(props) {
         </ul>
         {/* contient liste des amis */}
         <div className="mt-4 ml-4">
-          <Friendslist friends={props.user.followings} />
+          {props.user.followings.length>0 ? (
+                      <Friendslist friends={props.user.followings} />
+):null                    }
         </div>
         <div className="">
           <p className="text-white pt-10">Hi {props.user.login} or {props.page}</p>

@@ -64,6 +64,8 @@ app.post("/user/new", async (req, res) => {
     .then((result) => {
       console.log("result SIGNING", result)
       const token = jwt.sign({myuser : result}, 'key');
+      console.log("result SIGNING", token)
+
       res.status(200).send( token);
     })
   } catch (error) {
@@ -250,6 +252,22 @@ app.delete("/message/delete", async (req, res) => {
     }
   })
 });
+
+// get a user by login
+app.get("/user/:login", async (req, res) => {
+  const { login } = req.params;
+  console.log("I USER login", login)
+  await users.getUser(login)
+  .then((result) => {
+    if (result) {
+      console.log("result", result)
+      res.send(result)
+    } else {
+      res.send('erreur lors de getUser')
+    }
+  })
+});
+
 
 // update user message
 // app.update("/user/message/update", async (req, res) => {
