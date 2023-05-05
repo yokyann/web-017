@@ -6,7 +6,6 @@ import axios from "axios";
 import Profile from "../components/Profile";
 
 function Home(props) {
-  console.log("props from Home : ", props);
   const login = props.user.login;
   const [messages, setMessages] = useState([]);
   const [filteredMsg, setfilteredMsg] = useState(messages);
@@ -14,6 +13,8 @@ function Home(props) {
   const [following, setFollowing] = useState(false);
   const [userOnly, setUserOnly] = useState(false);
   const [visitMe, setVisitMe] = useState({});
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState(users);
 
   async function fetchMessages() {
     try {
@@ -30,7 +31,23 @@ function Home(props) {
   function getInputValue() {
     const inputVal = document.getElementById("filt").value.toLowerCase();
     const res = [];
+    console.log("WYMMMMMMMMM", userOnly);
+    if (userOnly){ // on filtre les users
+      const userstoFilter = users;
+      userstoFilter.forEach((user) => {
+        if (
+          user.login.toLowerCase().includes(inputVal)
+        ) {
+          res.push(user);
+        }
+      });
+      setFilteredUsers(res);
+      console.log("res FILTERED ", res)
+      document.getElementById("filt").value = "";
+      return;
+    }
     const messagesToFilter = following ? followmsg : messages;
+
 
     console.log("inputVal", following);
     console.log("messagesToFilter ARE YOU FILTERED", messagesToFilter);
@@ -45,11 +62,15 @@ function Home(props) {
     });
     console.log("res FILTERED ", res)
     setfilteredMsg(res);
+    document.getElementById("filt").value = "";
   }
+
+
 
   useEffect(() => {
     fetchMessages();
     getInputValue();
+
   }, []);
 
   if (messages === null) {
@@ -120,6 +141,8 @@ function Home(props) {
               setUserOnly={setUserOnly}
               setPage={props.setPage}
               setVisitMe={setVisitMe}
+              users = {filteredUsers}
+              setUsers = {setUsers}
             />
           ) : props.page === "profile_page" ? (
             <Profile setLogout={props.setLogout} user={props.user}   page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>

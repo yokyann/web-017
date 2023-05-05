@@ -15,8 +15,9 @@ function Feed(props) {
   const messages = props.messages
   const setMessages = props.setMessages
 
-  const [users, setUsers] = useState([]);
-
+  const users = props.users;
+  const setUsers = props.setUsers;
+  
 
   function onlyfollowers() {
     var res = []

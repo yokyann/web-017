@@ -18,8 +18,7 @@ function User(props) {
         console.log("err", err);
       });
   }, []);
-  
-  console.log("THE FOLLOWINGS OF EM", myfollowings)
+
 
   function handleFollow(e) {
     console.log("clicek");
