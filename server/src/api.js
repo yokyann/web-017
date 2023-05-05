@@ -225,10 +225,12 @@ app.patch("/message/unlike", async (req, res) => {
   console.log("I DELETE LIKE login", login)
   await messages.deleteLike( login, id)
   .then((result) => {
+    console.log("IS IT YOU MY PROBLEM", result)
     if (result) {
       console.log("result", result)
       res.send(result)
     } else {
+      console.log("HELP result", result)
       res.send('erreur lors de deleteLike')
     }
   })

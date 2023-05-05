@@ -6,6 +6,12 @@ function Message({ message, user, page , messages, setMessages}) {
   const [liked, setLiked] = useState(false);
   const [likecount, setLikecount] = useState(message.liked_by.length);
 
+  useEffect(() => {
+    if (message.liked_by.includes(user.login)) {
+      setLiked(true);
+    }
+  }, []);
+
   async function handleLike(e) {
     e.preventDefault();
     console.log("liked", liked)
@@ -15,17 +21,29 @@ function Message({ message, user, page , messages, setMessages}) {
       await axios.patch("http://localhost:4000/api/message/like", {
         id: message._id,
         login: user.login
+      })
+      .then((res) => {
+        console.log("res in like", res.data);
+        setLikecount(res.data.liked_by.length);
+        setLiked(true);
+      })
+      .catch((err) => {
+        console.log("err", err);
       });
-      setLikecount(likecount + 1);
-      setLiked(true);
 
     } else {
       await axios.patch("http://localhost:4000/api/message/unlike", {
         id: message._id,
         login: user.login
+      }).then((res) => {
+        console.log("res in unlike", res.data);
+        setLikecount(res.data.liked_by.length);
+        setLiked(false);
+      })
+      .catch((err) => {
+        console.log("err", err);
       });
-      setLikecount(likecount - 1);
-      setLiked(false);
+      
     }
   }
 

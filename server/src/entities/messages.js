@@ -50,13 +50,15 @@ class Messages {
         }
         let existLike = message.liked_by.includes(login);
         if (existLike) {
-            return "You already liked this message";
+            return message;
         }
         await this.db.collection("Messages").updateOne(
             { _id: new ObjectId(id) },
             { $addToSet: { liked_by: login } }
         );
-        return "Like added successfully";
+        const updatedMessage = await this.db.collection("Messages").findOne({ _id: new ObjectId(id) });
+        return updatedMessage;
+
     }
 
     // Comment a message
@@ -67,19 +69,21 @@ class Messages {
         console.log("in function removeLike IN MESSAGES", login, id)
         const message = await this.db.collection("Messages").findOne({ _id: new ObjectId(id) });
         if (!message) {
-            return "Message not found";
+          return "Message not found";
         }
         let existLike = message.liked_by.includes(login);
-        if (!existLike) {
-            return "You have not liked this message";
-        }
-        await this.db.collection('Messages').updateOne(
+        if (!existLike) { // si le user n'a pas liké le message
+          return message;
+        } else {
+          await this.db.collection('Messages').updateOne(
             { _id: new ObjectId(id) },
             { $pull: { liked_by: login } }
-        );
-        return "Like removed successfully";
-    }
-
+          );
+          const updatedMessage = await this.db.collection("Messages").findOne({ _id: new ObjectId(id) });
+          return updatedMessage;
+        }
+      }
+      
     // Remove a comment
     // async removeComment(login, message, comments, author_login)
 

@@ -9,8 +9,8 @@ function Home(props) {
   console.log("props from Home : ", props);
   const login = props.user.login;
   const [messages, setMessages] = useState([]);
-  const [filteredMsg, setfilteredMsg] = useState(messages); 
-  const [followmsg,setFollowmsg] = useState(props.messages);
+  const [filteredMsg, setfilteredMsg] = useState(messages);
+  const [followmsg, setFollowmsg] = useState(props.messages);
   const [following, setFollowing] = useState(false);
 
   async function fetchMessages() {
@@ -23,14 +23,14 @@ function Home(props) {
       console.log("error : ", error);
     }
   }
-  
+
   // ff jarrive pas c pg pour linstatn
 
   function getInputValue() {
     const inputVal = document.getElementById("filt").value.toLowerCase();
     const res = [];
     const messagesToFilter = following ? followmsg : messages;
-  
+
     messagesToFilter.forEach((msg) => {
       if (
         msg.author_login.toLowerCase().includes(inputVal) ||
@@ -39,14 +39,13 @@ function Home(props) {
         res.push(msg);
       }
     });
-  
+
     setfilteredMsg(res);
   }
 
-  
-
   useEffect(() => {
     fetchMessages();
+    getInputValue();
   }, []);
 
   if (messages === null) {
@@ -62,48 +61,52 @@ function Home(props) {
           <h1 className="ml-4 text-white">Birdy {props.page}</h1>
         </div>
         {/* menu */}
-        <Sidebar user={props.user} setLogout={props.setLogout} page={props.page} setPage={props.setPage} />
+        <Sidebar
+          user={props.user}
+          setLogout={props.setLogout}
+          page={props.page}
+          setPage={props.setPage}
+        />
       </div>
       {/* colonne 2 main feed */}
-      <div className="w-3/6 ">
-        <div>
+      <div className="w-5/6 p-4">
+        <div className="flex">
           <input
             type="search"
             className="block w-full m-4 p-2 pl-10 border border-gray-300 rounded-lg bg-gray-50 "
-            id = "filt"
+            id="filt"
             placeholder="Search here"
           ></input>
-          
+          <div className="w-1/6">
+            <button
+              type="submit"
+              className="m-4 p-3 ml-6 mt-5  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
+              onClick={getInputValue}
+            >
+              Search
+            </button>
+          </div>
         </div>
-        <div className="m-4">
-        {props.page === "home_page" ? (
-          <Feed 
-          messages={filteredMsg} 
-          user={props.user} 
-          followmsg={followmsg} 
-          setFollowmsg={setFollowmsg} 
-          following={following} 
-          setFollowing={setFollowing}
-          page = {props.page}
-          setMessages={setfilteredMsg}
-        />
-        
-        ) : (
-          props.page === "profile_page" ? (
-            <Profile user={props.user} page={props.page}></Profile> ) : (
-              <div>404 page do not exist</div>))}
+        <div className="mx-10 my-4 center ">
+          {props.page === "home_page" ? (
+            <Feed
+              messages={filteredMsg}
+              user={props.user}
+              followmsg={followmsg}
+              setFollowmsg={setFollowmsg}
+              following={following}
+              setFollowing={setFollowing}
+              page={props.page}
+              setMessages={setfilteredMsg}
+            />
+          ) : props.page === "profile_page" ? (
+            <Profile user={props.user} page={props.page}></Profile>
+          ) : (
+            <div>404 page do not exist</div>
+          )}
         </div>
       </div>
-      <div className="w-1/6">
-        <button
-            type="submit"
-            className="m-4 p-3 ml-6 mt-5  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
-            onClick={getInputValue}
-          >
-            Search
-        </button></div>
     </div>
-
   );
 }
 

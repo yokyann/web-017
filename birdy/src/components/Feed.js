@@ -61,6 +61,7 @@ function Feed(props){
       })
       .then((res) => {
         console.log("res.data", res.data);
+        setMessages([res.data, ...messages]);
         setNewMessage("");
       })
     console.log("testtttttttttttttherfdjkghdsfjklghjk",newMessage)
@@ -69,20 +70,20 @@ function Feed(props){
 
   return (
     <div>
-      <div className="">
+      <div className="my-2">
         <label>Create new message</label>
         <br></br>
         <input  
         onChange={handleChange} 
         onKeyDown={handleCreateMessage} 
         type="text" 
-        className="  border rounded-lg"></input>
+        className=" w-full p-2 h-20 border rounded-lg"></input>
 
-        <button className="border p-2 ml-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2" onClick={handleButtonClick}>Create new message</button>
+        <button className="border p-2 my-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2" onClick={handleButtonClick}>Create new message</button>
       </div>
 
       {/* list of all messages */}
-      <div className="ml-4">
+      <div>
         {/* <ListMessages /> */}
         <div>
           <input
