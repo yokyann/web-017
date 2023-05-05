@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import FollowButton from "./FollowButton";
+import UnfollowButton from "./UnfollowButton";
 
 function User(props) {
   const user = props.user;
@@ -19,40 +21,7 @@ function User(props) {
       });
   }, []);
 
-  function handleUnfollow(e) {
-        console.log(user.login);
-      axios.patch("http://localhost:4000/api/user/unfollow", {
-        login: me.login,
-        loginToUnfollow : user.login,
-        })
-        .then((res) => {
-            console.log("res in unfollow", res.data);
-            setMyfollowings(res.data.followings);
-            
-            })
-        .catch((err) => {
-            console.log("err", err);
-            }
-        );
-    
-    }
 
-    function handleFollow(e) {
-        console.log(user.login);
-      axios.patch("http://localhost:4000/api/user/follow", {
-        login: me.login,
-        loginToFollow : user.login,
-        })
-        .then((res) => {
-            console.log("res in follow", res.data.followings);
-            setMyfollowings(res.data.followings);
-            
-            })
-        .catch((err) => {
-            console.log("err", err);
-            }
-        );
-    }
 
 
 
@@ -84,15 +53,12 @@ function User(props) {
         </div>
         {myfollowings.includes(user.login) ? (
           <div id="trash" className="flex absolute right-20">
-            <button onClick={handleUnfollow} value="Unfollow" className="border">
-              Unfollow
-            </button>
+            <UnfollowButton setMyfollowings={setMyfollowings} me={me} user={user}/>
+
           </div>
         ) : (
           <div id="trash" className="flex absolute right-20">
-            <button onClick={handleFollow} value="Follow" className="border">
-              Follow
-            </button>
+            <FollowButton setMyfollowings={setMyfollowings} me={me} user={user}/>
           </div>
         )}
       </div>

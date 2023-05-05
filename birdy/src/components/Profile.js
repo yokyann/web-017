@@ -2,18 +2,33 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ListAllMessages from "./ListAllMessages";
 import ListFollowings from "./ListFollowings";
+import FollowButton from "./FollowButton";
+import UnfollowButton from "./UnfollowButton";
 
 function Profile(props) {
   const [myMessages, setMyMessages] = useState([]);
   const login = props.user.login;
-  const [followings, setFollowings] = useState(props.user.followings);
+  const [followings, setFollowings] = useState([]);
   const followers = props.user.followers;
+  const me = props.me;
+  const melogin = props.me.login;
 
   async function getuser() {
     try {
-      const res = await axios.get(`http://localhost:4000/api/user/${login}`);
-      console.log("res.data", res.data);
-      setFollowings(res.data.followings);
+      if (props.page === "profile_page") {
+        const res = await axios.get("http://localhost:4000/api/user", {
+            params: { melogin },
+            });
+        console.log("axios.get('/user') : ", res.data);
+        setFollowings(res.data.followings);
+        }
+        if (props.page === "visiting") {
+            const res = await axios.get("http://localhost:4000/api/user", {
+                params: { login },
+            });
+            console.log("axios.get('/user') : ", res.data);
+            setFollowings(res.data.followings);
+            }
     } catch (error) {
       console.log("error : ", error);
     }
@@ -70,8 +85,13 @@ function Profile(props) {
             </button>
           </div>
         ) : (
-          <div>
+          <div className="flex">
             <button>Block</button>
+            {followings.includes(props.user.login) ? (
+                <UnfollowButton setMyfollowings={setFollowings} me={props.me} user={props.user}/>
+            ) : (
+                <FollowButton setMyfollowings={setFollowings} me={props.me} user={props.user}/>
+            )}
           </div>
         )}
       </div>

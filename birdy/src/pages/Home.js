@@ -188,10 +188,10 @@ function Home(props) {
               
             />
           ) : props.page === "profile_page" ? (
-            <Profile setLogout={props.setLogout} user={props.user}   page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>
+            <Profile setLogout={props.setLogout} user={props.user} me={props.user}  page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>
           ) : (
               props.page === "visiting" ? (
-                <Profile setLogout={props.setLogout} user={visitMe} page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>
+                <Profile me={props.user} setLogout={props.setLogout} user={visitMe} page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>
               ):(null)         
 
           )}
