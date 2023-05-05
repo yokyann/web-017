@@ -16,7 +16,6 @@ function Home(props) {
   async function fetchMessages() {
     try {
       const res = await axios.get("http://localhost:4000/api/messages");
-      console.log("axios.get('/messages') : ", res.data);
       setMessages(res.data);
       setfilteredMsg(res.data);
     } catch (error) {
@@ -100,7 +99,7 @@ function Home(props) {
               setMessages={setfilteredMsg}
             />
           ) : props.page === "profile_page" ? (
-            <Profile user={props.user} page={props.page}></Profile>
+            <Profile user={props.user} page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>
           ) : (
             <div>404 page do not exist</div>
           )}

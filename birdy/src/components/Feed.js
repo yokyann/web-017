@@ -14,6 +14,7 @@ function Feed(props){
   const messages = props.messages
   const setMessages = props.setMessages
 
+
   function onlyfollowers(){
     var res = []
     props.messages.forEach(msg =>{
@@ -54,6 +55,10 @@ function Feed(props){
 
   
   async function createMessage(e) {
+    if (newMessage === "") {
+      alert("Please enter a message");
+      return;
+    }
     await axios
       .post("http://localhost:4000/api/messages/new",{
         newMessage,
@@ -74,6 +79,7 @@ function Feed(props){
         <label>Create new message</label>
         <br></br>
         <input  
+        value = {newMessage}
         onChange={handleChange} 
         onKeyDown={handleCreateMessage} 
         type="text" 
@@ -104,7 +110,7 @@ function Feed(props){
           <ListAllMessages messages={followmsg} info = {props} page={props.page} setMessages={setMessages}/>
         ) : (
           // List all messages
-          <ListAllMessages messages={props.messages} user = {props.user} page={props.page}/>
+          <ListAllMessages messages={props.messages} user = {props.user} page={props.page} setMessages={props.setMessages}/>
         )}
       </div>
     </div>

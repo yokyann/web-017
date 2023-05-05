@@ -1,7 +1,13 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-function Message({ message, user, page , messages, setMessages}) {
+function Message(props) {
+
+  const user = props.user;
+  const message = props.message;
+  const page = props.page;
+  const setMessages = props.setMessages;
+  const messages = props.messages;
 
   const [liked, setLiked] = useState(false);
   const [likecount, setLikecount] = useState(message.liked_by.length);
@@ -62,8 +68,9 @@ function Message({ message, user, page , messages, setMessages}) {
       })
 
         .then((res) => {
-          setMessages(messages.filter((msg) => res._id !== msg._id));
-          
+          console.log("res", res.data);
+          props.setMyMessages(messages.filter((m) => m._id !== message._id));       
+          setMessages(res.data);  
         })
         .catch((err) => {
           console.log("err", err);

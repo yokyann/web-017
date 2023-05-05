@@ -50,7 +50,7 @@ function Profile(props) {
             </div>
             {/* Liste des messages écrits */}
             <div className="m-2">
-                <ListAllMessages messages={myMessages} page={props.page}/>
+                <ListAllMessages messages={myMessages} page={props.page} user={props.user} setMyMessages={setMyMessages} setMessages={props.setMessages} fetchMessages={props.fetchMessages}/>
             </div>
         </div>
     );

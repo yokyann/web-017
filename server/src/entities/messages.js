@@ -15,7 +15,9 @@ class Messages {
             liked_by: [],
             date_creation: new Date()
         });
-        return result;
+        console.log("result IN CREATION", result)
+        const messageCreated = await this.db.collection('Messages').findOne({ _id: new ObjectId(result.insertedId) });
+        return messageCreated;
     }
 
     // Get all messages
@@ -38,7 +40,8 @@ class Messages {
     async deleteMessage(id) {
         console.log("in function deleteMessage IN MESSAGES", id)
         const result = await this.db.collection('Messages').deleteOne({ _id: new ObjectId(id) });
-        return result;
+        const newallmessages = await this.db.collection('Messages').find().toArray();
+        return newallmessages;
     }
 
     // Like a message
