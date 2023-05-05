@@ -4,18 +4,7 @@ import User from "./User";
 
 function ListUsers(props){
 
-  async function fetchUsers() {
-    try {
-      const res = await axios.get("http://localhost:4000/api/users/all");
-      props.setUsers(res.data);
-    } catch (error) {
-      console.log("error : ", error);
-    }
-  }
-
-   useEffect(() => {
-    fetchUsers();
-    }, []);
+ 
 
     return (
         <div className="mt-4">

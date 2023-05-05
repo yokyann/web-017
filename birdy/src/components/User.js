@@ -19,11 +19,25 @@ function User(props) {
       });
   }, []);
 
+  function handleUnfollow(e) {
+        console.log(user.login);
+      axios.patch("http://localhost:4000/api/user/unfollow", {
+        login: me.login,
+        loginToUnfollow : user.login,
+        })
+        .then((res) => {
+            console.log("res in unfollow", res.data);
+            setMyfollowings(res.data.followings);
+            
+            })
+        .catch((err) => {
+            console.log("err", err);
+            }
+        );
+    
+    }
 
-  function handleFollow(e) {
-    console.log("clicek");
-    console.log("e.target.value", e.target.value)
-    if ("Follow" === e.target.value) {
+    function handleFollow(e) {
         console.log(user.login);
       axios.patch("http://localhost:4000/api/user/follow", {
         login: me.login,
@@ -39,23 +53,10 @@ function User(props) {
             }
         );
     }
-    if ("Unfollow" === e.target.value) {
-        console.log(user.login);
-      axios.patch("http://localhost:4000/api/user/unfollow", {
-        login: me.login,
-        loginToUnfollow : user.login,
-        })
-        .then((res) => {
-            console.log("res in unfollow", res.data);
-            setMyfollowings(res.data.followings);
-            
-            })
-        .catch((err) => {
-            console.log("err", err);
-            }
-        );
-    }
-  }
+
+
+
+  
 
   function visitPage(e) {
     console.log("visitPage");
@@ -83,7 +84,7 @@ function User(props) {
         </div>
         {myfollowings.includes(user.login) ? (
           <div id="trash" className="flex absolute right-20">
-            <button onClick={handleFollow} value="Unfollow" className="border">
+            <button onClick={handleUnfollow} value="Unfollow" className="border">
               Unfollow
             </button>
           </div>

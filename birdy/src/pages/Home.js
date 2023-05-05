@@ -16,11 +16,51 @@ function Home(props) {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState(users);
 
+  async function fetchUsers() {
+    try {
+      const res = await axios.get("http://localhost:4000/api/users/all");
+      setUsers(res.data);
+      setFilteredUsers(res.data);
+    } catch (error) {
+      console.log("error : ", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+
+  function onlyfollowers() {
+    var res = []
+    messages.forEach(msg => {
+      if (msg.author_login && props.user.followings.includes(msg.author_login.toLowerCase()))
+        res.push(msg)
+    })
+    setFollowmsg(res)
+  }
+
+  useEffect(() => {
+    onlyfollowers()
+  }, [messages])
+  
+  function getfilteredMsg() {
+    if (following) {
+      setfilteredMsg(followmsg);
+    }
+    else {
+      setfilteredMsg(messages);
+    }
+  }
+
+  useEffect(() => {
+    getfilteredMsg();
+  }, [following, messages]);
+
   async function fetchMessages() {
     try {
       const res = await axios.get("http://localhost:4000/api/messages");
       setMessages(res.data);
-      setfilteredMsg(res.data);
     } catch (error) {
       console.log("error : ", error);
     }
@@ -31,27 +71,19 @@ function Home(props) {
   function getInputValue() {
     const inputVal = document.getElementById("filt").value.toLowerCase();
     const res = [];
-    console.log("WYMMMMMMMMM", userOnly);
     if (userOnly){ // on filtre les users
       const userstoFilter = users;
       userstoFilter.forEach((user) => {
-        if (
-          user.login.toLowerCase().includes(inputVal)
-        ) {
+        if (user.login.toLowerCase().includes(inputVal)) {
           res.push(user);
         }
       });
       setFilteredUsers(res);
-      console.log("res FILTERED ", res)
-      document.getElementById("filt").value = "";
       return;
     }
+    // on filtre les messages
     const messagesToFilter = following ? followmsg : messages;
-
-
-    console.log("inputVal", following);
-    console.log("messagesToFilter ARE YOU FILTERED", messagesToFilter);
-
+  
     messagesToFilter.forEach((msg) => {
       if (
         msg.author_login.toLowerCase().includes(inputVal) ||
@@ -60,11 +92,19 @@ function Home(props) {
         res.push(msg);
       }
     });
-    console.log("res FILTERED ", res)
+  
     setfilteredMsg(res);
+  
+    // Filter users
+    const usersToFilter = users;
+    const filteredUsers = usersToFilter.filter((user) =>
+      user.login.toLowerCase().includes(inputVal)
+    );
+    setFilteredUsers(filteredUsers);
+  
     document.getElementById("filt").value = "";
   }
-
+  
 
 
   useEffect(() => {
@@ -142,7 +182,10 @@ function Home(props) {
               setPage={props.setPage}
               setVisitMe={setVisitMe}
               users = {filteredUsers}
+              setFilteredUsers = {setFilteredUsers}
               setUsers = {setUsers}
+
+              
             />
           ) : props.page === "profile_page" ? (
             <Profile setLogout={props.setLogout} user={props.user}   page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>

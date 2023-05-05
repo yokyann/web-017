@@ -17,16 +17,8 @@ function Feed(props) {
 
   const users = props.users;
   const setUsers = props.setUsers;
-  
 
-  function onlyfollowers() {
-    var res = []
-    props.messages.forEach(msg => {
-      if (msg.author_login && followings.includes(msg.author_login.toLowerCase()))
-        res.push(msg)
-    })
-    setFollowmsg(res)
-  }
+
 
 
   function handleAll() {
@@ -34,7 +26,6 @@ function Feed(props) {
   }
   function handleFollowing() {
     setFollowing(true)
-    onlyfollowers()
   }
 
 
@@ -79,7 +70,9 @@ function Feed(props) {
     props.setUserOnly(false)
   }
   function handleSeeUsers() {
+    console.log("users", users)
     props.setUserOnly(true)
+    props.setFilteredUsers(users)
   }
 
   return (
@@ -126,7 +119,7 @@ function Feed(props) {
             </div>
 
             {following ? (
-              <ListAllMessages messages={followmsg} info={props} page={props.page} setMessages={setMessages} />
+              <ListAllMessages messages={followmsg} info={props} page={props.page} setMessages={props.setMessages} />
             ) : (
               // List all messages
               <ListAllMessages messages={props.messages} user={props.user} page={props.page} setMessages={props.setMessages} />
