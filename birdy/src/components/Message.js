@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import AddComment from "./AddComment";
 
 function Message(props) {
   const user = props.user;
@@ -8,8 +9,27 @@ function Message(props) {
   const setMessages = props.setMessages;
   const messages = props.messages;
 
+  const [comments, setComments] = useState([]);
+
   const [liked, setLiked] = useState(false);
   const [likecount, setLikecount] = useState(message.liked_by.length);
+
+  async function getComments() {
+    try {
+      const response = await axios.get(`http://localhost:4000/api/message/${message._id}`);
+      console.log("res in getComments", response.data);
+      setComments(response.data.comments);
+    } catch (error) {
+      console.log("err", error);
+    }
+  }
+  
+
+  useEffect(() => {
+    getComments();
+  }, []);
+
+
 
   useEffect(() => {
     if (user && message.liked_by.includes(user.login)) {
@@ -84,16 +104,23 @@ function Message(props) {
       <br />
       <div>
         <h3>
-          Comments :
           <ul className="list-disc pl-4">
-            {message.comments.map((m) => (
-              <li key={m}>{m}</li>
-            ))}
+            {comments.length > 0 ? (
+              comments.map((comment) => (
+                <li key={comment._id}>
+                  {comment}
+                </li>
+              ))
+            ) : (
+              <li>No comments yet</li>
+            )}
+
           </ul>
         </h3>
+        <AddComment message={message} comments={comments} setComments={setComments} user={props.user} ></AddComment>
       </div>
       {/* like */}
-      <div className="flex absolute bottom-2  right-5">
+      <div className="flex absolute bottom-1  right-5">
         {/* {likecount}<button onClick={handleLike} ><img className="ml-2 w-4 h-4 mt-1 " src="Liked.png "></img></button> */}
 
         {likecount}

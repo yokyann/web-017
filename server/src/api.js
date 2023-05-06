@@ -269,11 +269,37 @@ app.get("/user/:login", async (req, res) => {
 });
 
 
-// update user message
-// app.update("/user/message/update", async (req, res) => {
-
 // addcomment
-// app.update("/messages/addcomment", async (req, res) => {
+app.patch("/messages/addcomment", async (req, res) => {
+  const { id, login, newComment } = req.body;
+  console.log("I ADD COMMENT id", id)
+  console.log("I ADD COMMENT login", login)
+  console.log("I ADD COMMENT comment", newComment)
+  await messages.addComment(login, id, newComment)
+  .then((result) => {
+    if (result) {
+      console.log("result", result)
+      res.send(result)
+    } else {
+      res.send('erreur lors de addComment')
+    }
+  })
+});
+
+// get message by id
+app.get("/message/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log("I MESSAGE id", id)
+  await messages.getMessage(id)
+  .then((result) => {
+    if (result) {
+      console.log("result", result)
+      res.send(result)
+    } else {
+      res.send('erreur lors de getMessage')
+    }
+  })
+});
 
 // delete a like
 app.patch("/message/unlike", async (req, res) => {
@@ -293,7 +319,5 @@ app.patch("/message/unlike", async (req, res) => {
   })
 });
 
-// delete a comment
-// app.delete("/messages/deletecomment", async (req, res) => {
 
 module.exports = app;

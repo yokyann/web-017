@@ -64,8 +64,34 @@ class Messages {
 
     }
 
+    // get message by id
+    async getMessage(id) {
+        console.log("in function getMessageById IN MESSAGES", id)
+
+        const message = await this.db.collection("Messages").findOne({ _id: new ObjectId(id) });
+        if (!message) {
+            return "Message not found";
+        }
+        return message;
+    }
+
+
     // Comment a message
-    // async commentMessage(login, message, comments, author_login)
+    async addComment(login, id, comment) {
+        console.log("in function commentMessage IN MESSAGES", login, id, comment)
+        const message = await this.db.collection("Messages").findOne({ _id: new ObjectId(id) });
+        if (!message) {
+            return "Message not found";
+        }
+        await this.db.collection("Messages").updateOne(
+            { _id: new ObjectId(id) },
+            { $addToSet: { comments: comment  } }
+        );
+            
+        const updatedMessage = await this.db.collection("Messages").findOne({ _id: new ObjectId(id) });
+        return updatedMessage;
+    }
+
 
     // Remove a like 
     async deleteLike(login, id) {
@@ -86,9 +112,7 @@ class Messages {
           return updatedMessage;
         }
       }
-      
-    // Remove a comment
-    // async removeComment(login, message, comments, author_login)
+
 
 }
 
