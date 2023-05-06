@@ -4,31 +4,45 @@ import ListAllMessages from "./ListAllMessages";
 import ListFollowings from "./ListFollowings";
 import FollowButton from "./FollowButton";
 import UnfollowButton from "./UnfollowButton";
+import ListFollowingsProfile from "./ListFollowingsProfile";
+import ListUsers from "./ListUsers";
 
 function Profile(props) {
   const [myMessages, setMyMessages] = useState([]);
   const login = props.user.login;
-  const [followings, setFollowings] = useState([]);
-  const followers = props.user.followers;
+  const [followers, setFollowers] = useState([]);
+  const [followersv, setFollowersv] = useState([]);
   const me = props.me;
   const melogin = props.me.login;
+  const [commonFollowers, setCommonFollowers] = useState([]);
+
+  useEffect(() => {
+    const commonFollowers = props.user.followers.filter(
+      (follower) =>
+        follower !== me.login && props.myfollowings.includes(follower)
+    );
+    setCommonFollowers(commonFollowers);
+  }, [props.myfollowings, me.login, props.user.followers]);
 
   async function getuser() {
     try {
-      if (props.page === "profile_page") {
-        const res = await axios.get("http://localhost:4000/api/user", {
-            params: { melogin },
-            });
+      if (props.page === "profile_page" || props.page === "home_page") {
+        const res = await axios.get(
+          `http://localhost:4000/api/user/${props.me.login}`
+        );
+        console.log("axios.get('/user/') MINEEE : ", res.data);
+        setFollowers(res.data.followers);
+
+        props.setMyfollowings(res.data.followings);
+      }
+      if (props.page === "visiting") {
+        const res = await axios.get(
+          `http://localhost:4000/api/user/${props.user.login}`
+        );
         console.log("axios.get('/user') : ", res.data);
-        setFollowings(res.data.followings);
-        }
-        if (props.page === "visiting") {
-            const res = await axios.get("http://localhost:4000/api/user", {
-                params: { login },
-            });
-            console.log("axios.get('/user') : ", res.data);
-            setFollowings(res.data.followings);
-            }
+        setFollowersv(res.data.followers);
+        props.setFollowingv(res.data.followings);
+      }
     } catch (error) {
       console.log("error : ", error);
     }
@@ -86,11 +100,26 @@ function Profile(props) {
           </div>
         ) : (
           <div className="flex">
-            <button>Block</button>
-            {followings.includes(props.user.login) ? (
-                <UnfollowButton setMyfollowings={setFollowings} me={props.me} user={props.user}/>
+            {props.myfollowings.includes(props.user.login) ? (
+              <div >
+                <UnfollowButton
+                  setMyfollowings={props.setMyfollowings}
+                  setHisFollowings={props.setFollowingsv}
+                  me={props.me}
+                  user={props.user}
+                  setFollowersv={setFollowersv}
+                />
+              </div>
             ) : (
-                <FollowButton setMyfollowings={setFollowings} me={props.me} user={props.user}/>
+              <div>
+                <FollowButton
+                  setMyfollowings={props.setMyfollowings}
+                  setHisFollowings={props.setFollowingsv}
+                  me={props.me}
+                  user={props.user}
+                  setFollowersv={setFollowersv}
+                />
+              </div>
             )}
           </div>
         )}
@@ -99,14 +128,28 @@ function Profile(props) {
       {/* Lise des personnes suivies */}
       <div className="flex flex-col  md:flex-row">
         <div className="rounded-xl   p-5 relative container mx-auto w-1/2 flex-col m-2 mr-2 bg-sky-100">
-          <h1 className="font-bold border-b-2 border-black">Followings :</h1>
-          <ListFollowings followings={followings} />
+          <h1 className="font-bold border-b-2 border-black">Followings : </h1>
+          {props.page === "profile_page" ? (
+            <ListFollowingsProfile setMyfollowings={props.setMyfollowings}
+            setFollowersv={setFollowersv}
+            me={me}
+            getuser={props.getuser}
+            followings={props.myfollowings} 
+            page={props.page}/>
+          ) : (
+            <ListFollowings followings={props.followingv} />
+          )}
         </div>
 
         {/* Liste des personnes qui nous suivent */}
         <div className="rounded-xl relative p-5 container mx-auto w-1/2 flex-col m-2  bg-sky-100">
-          <h1 className="font-bold border-b-2 border-black">Followers :</h1>
-          <ListFollowings followings={followers} />
+          <h1 className="font-bold border-b-2 border-black">Followers : 
+</h1>
+          {props.page === "profile_page" ? (
+            <ListFollowings followings={followers} />
+          ) : (
+            <ListFollowings followings={followersv} />
+          )}
         </div>
       </div>
       {/* Liste des messages écrits */}

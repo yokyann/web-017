@@ -52,11 +52,11 @@ function Sidebar(props) {
         {/* contient liste des amis */}
         <div className="mt-4 ml-4">
           {props.user.followings.length>0 ? (
-                      <Friendslist friends={props.user.followings} />
+                      <Friendslist friends={props.myfollowings} />
 ):null                    }
         </div>
         <div className="">
-          <p className="text-white pt-10">Hi {props.user.login} or {props.page}</p>
+          <p className="text-white pt-10">Hi {props.user.login}</p>
         </div>
       </div>
     </div>

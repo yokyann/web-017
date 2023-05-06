@@ -4,7 +4,6 @@ function ListFollowings(props){
     return(
         <div>
         {followings.map((following) => (
-          console.log("un mesage", following),
           <div>{following}</div>
         ))}
       </div>

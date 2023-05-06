@@ -11,10 +11,49 @@ function Home(props) {
   const [filteredMsg, setfilteredMsg] = useState(messages);
   const [followmsg, setFollowmsg] = useState([]);
   const [following, setFollowing] = useState(false);
+  const [followingv, setFollowingv] = useState([]);
+
   const [userOnly, setUserOnly] = useState(false);
-  const [visitMe, setVisitMe] = useState({});
+  const [visitMe, setVisitMe] = useState({
+    lastName: "",
+    firstName: "",
+    login:"",
+    password:"",
+    blocked_users: [],
+    followers: [],
+    followings: [],
+  });
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState(users);
+
+  const [myfollowings, setMyfollowings] = useState(props.user.followings);
+
+
+  async function getuser() {
+    console.log()
+    try {
+      if (props.page === "profile_page" || props.page === "home_page") {
+        const res = await axios.get(`http://localhost:4000/api/user/${props.user.login}`);
+        console.log("axios.get('/user/') MINEEE : ", res.data);
+        setMyfollowings(res.data.followings);
+      }
+      if (props.page === "visiting") {
+        const res = await axios.get(`http://localhost:4000/api/user/${visitMe.login}`);
+        console.log("axios.get('/user') : ", res.data);
+        setFollowingv(res.data.followings);
+      }
+    } catch (error) {
+      console.log("error : ", error);
+    }
+  }
+  
+
+  useEffect(() => {
+    getuser();
+    console.log("GSJOEKDSZSLPD", myfollowings);
+  }, []);
+
+
 
   async function fetchUsers() {
     try {
@@ -133,7 +172,7 @@ function Home(props) {
       <div className="w-2/6 flex-col  bg-gray-800">
         <div className="flex items-center ">
           <img className="ml-4 w-12" src="birdy.png"></img>
-          <h1 className="ml-4 text-white">Birdy {props.page}</h1>
+          <h1 className="ml-4 text-white">Birdy</h1>
         </div>
         {/* menu */}
         <Sidebar
@@ -141,6 +180,7 @@ function Home(props) {
           setLogout={props.setLogout}
           page={props.page}
           setPage={props.setPage}
+          myfollowings={myfollowings}
         />
       </div>
       {/* colonne 2 main feed */}
@@ -167,6 +207,7 @@ function Home(props) {
         </div>
         
         <div className="mx-10 my-4 center ">
+       
           {props.page === "home_page" ? (
             <Feed
               messages={filteredMsg}
@@ -184,14 +225,27 @@ function Home(props) {
               users = {filteredUsers}
               setFilteredUsers = {setFilteredUsers}
               setUsers = {setUsers}
+              visitMe={visitMe}
+
+              myfollowings={myfollowings}
+              setMyfollowings={setMyfollowings}
+              getuser={getuser}
 
               
             />
+            
           ) : props.page === "profile_page" ? (
-            <Profile setLogout={props.setLogout} user={props.user} me={props.user}  page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>
+            
+            <Profile myfollowings={myfollowings}
+              setMyfollowings={setMyfollowings}               users = {filteredUsers}               setUsers = {setUsers}
+
+              setFollowingv={setFollowingv} followingv={followingv} setLogout={props.setLogout} user={props.user} me={props.user}  page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>
           ) : (
               props.page === "visiting" ? (
-                <Profile me={props.user} setLogout={props.setLogout} user={visitMe} page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>
+                <Profile myfollowings={myfollowings}
+                setMyfollowings={setMyfollowings}               users = {filteredUsers}               setUsers = {setUsers}
+
+                setFollowingv={setFollowingv} followingv={followingv} me={props.user} setLogout={props.setLogout} user={visitMe} page={props.page} setMessages={setfilteredMsg} fetchMessages={fetchMessages}></Profile>
               ):(null)         
 
           )}
